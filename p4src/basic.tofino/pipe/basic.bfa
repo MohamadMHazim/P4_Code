@@ -1,0 +1,395 @@
+version:
+  run_id: "5ae3bfd56acc4711"
+  target: Tofino
+error_mode: propagate_and_disable
+phv ingress:
+  ig_intr_md.ingress_port: {  stage 0: H2(0..8) } 
+  hdr.ethernet.dst_addr.0-7: TB4
+  hdr.ethernet.dst_addr.8-15: TB5
+  hdr.ethernet.dst_addr.16-23: TB6
+  hdr.ethernet.dst_addr.24-31: TB7
+  hdr.ethernet.dst_addr.32-47: TH14
+  hdr.ethernet.src_addr.0-15: TH10
+  hdr.ethernet.src_addr.16-31: TH11
+  hdr.ethernet.src_addr.32-47: TH13
+  hdr.ethernet.ether_type: TH12
+  hdr.ipv4.version: TW4(28..31)
+  hdr.ipv4.ihl: TW4(24..27)
+  hdr.ipv4.diffserv: TW4(16..23)
+  hdr.ipv4.total_len: TW4(0..15)
+  hdr.ipv4.identification: TW7(16..31)
+  hdr.ipv4.flags: TW7(13..15)
+  hdr.ipv4.frag_offset: TW7(0..12)
+  hdr.ipv4.ttl: TW6(24..31)
+  hdr.ipv4.protocol: TW6(16..23)
+  hdr.ipv4.hdr_checksum: TW6(0..15)
+  hdr.ipv4.src_addr: TW9
+  hdr.ipv4.dst_addr: TW8
+  hdr.tcp.sport: TH9
+  hdr.tcp.dport: TH8
+  hdr.tcp.seq: TW11
+  hdr.tcp.ack: TW10
+  hdr.tcp.dataofs: TW5(28..31)
+  hdr.tcp.reserved: TW5(24..27)
+  hdr.tcp.flags: TW5(16..23)
+  hdr.tcp.window: TW5(0..15)
+  hdr.tcp.chksum: TH7
+  hdr.tcp.urgptr: TH6
+  hdr.udp.sport: TH7
+  hdr.udp.dport: TH6
+  hdr.udp.len: TW5(16..31)
+  hdr.udp.chksum: TW5(0..15)
+  ig_intr_md_for_tm.ucast_egress_port: {  stage 1..12: H0(0..8) } 
+  ig_intr_md_for_dprsr.drop_ctl: {  stage 1..12: B1(0..2) } 
+  ig_intr_md_for_dprsr.mirror_type: {  stage 12: B0(0..2) } 
+  $tmp2: {  stage 12: H1(0..9) } 
+  hdr.ethernet.$valid: B2(0)
+  hdr.ipv4.$valid: B2(1)
+  hdr.tcp.$valid: B2(2)
+  hdr.udp.$valid: B2(3)
+phv egress:
+  eg_intr_md.egress_port: H16(0..8)
+  hdr.min_parse_depth_padding_0$0.packet_payload.0-31: TW0
+  hdr.min_parse_depth_padding_0$0.packet_payload.32-63: TW1
+  hdr.min_parse_depth_padding_0$0.packet_payload.64-79: TH18
+  hdr.min_parse_depth_padding_0$0.packet_payload.80-87: TB0
+  hdr.min_parse_depth_padding_0$1.packet_payload.0-31: TW2
+  hdr.min_parse_depth_padding_0$1.packet_payload.32-63: TW3
+  hdr.min_parse_depth_padding_0$1.packet_payload.64-79: TH19
+  hdr.min_parse_depth_padding_0$1.packet_payload.80-87: TB1
+  hdr.min_parse_depth_padding_0$2.packet_payload.0-15: TH0
+  hdr.min_parse_depth_padding_0$2.packet_payload.16-31: TH1
+  hdr.min_parse_depth_padding_0$2.packet_payload.32-47: TH2
+  hdr.min_parse_depth_padding_0$2.packet_payload.48-63: TH3
+  hdr.min_parse_depth_padding_0$2.packet_payload.64-79: TH20
+  hdr.min_parse_depth_padding_0$2.packet_payload.80-87: TB2
+  hdr.min_parse_depth_padding_0$3.packet_payload.0-15: TH4
+  hdr.min_parse_depth_padding_0$3.packet_payload.16-31: TH5
+  hdr.min_parse_depth_padding_0$3.packet_payload.32-63: TW12
+  hdr.min_parse_depth_padding_0$3.packet_payload.64-79: TH21
+  hdr.min_parse_depth_padding_0$3.packet_payload.80-87: TB3
+  hdr.min_parse_depth_padding_0.$stkvalid: B16(0..3)
+  hdr.min_parse_depth_padding_0$0.$valid: {  stage 12: B16(3) } 
+  hdr.min_parse_depth_padding_0$1.$valid: {  stage 12: B16(2) } 
+  hdr.min_parse_depth_padding_0$2.$valid: {  stage 12: B16(1) } 
+  hdr.min_parse_depth_padding_0$3.$valid: B16(0)
+parser ingress:
+  start: $entry_point.start
+  init_zero: [ B1, B0, H1, B2 ]
+  bitwise_or: [ B2 ]
+  hdr_len_adj: 16
+  states:
+    $entry_point.start:
+      *:
+        0..1: H2  # bit[7..15] -> H2 bit[8..0]: ingress::ig_intr_md.ingress_port
+        16..17: TH14  # ingress::hdr.ethernet.dst_addr[47:32].32-47
+        18: TB7  # ingress::hdr.ethernet.dst_addr[31:24].24-31
+        19: TB6  # ingress::hdr.ethernet.dst_addr[23:16].16-23
+        20: TB5  # ingress::hdr.ethernet.dst_addr[15:8].8-15
+        21: TB4  # ingress::hdr.ethernet.dst_addr[7:0].0-7
+        22..23: TH13  # ingress::hdr.ethernet.src_addr[47:32].32-47
+        24..25: TH11  # ingress::hdr.ethernet.src_addr[31:16].16-31
+        load: { half : 28..29 }
+        shift: 26
+        buf_req: 30
+        next: $entry_point.start.$split_0
+    $entry_point.start.$split_0:
+      match: [ half ]
+      0x0800:
+        0..1: TH10  # ingress::hdr.ethernet.src_addr[15:0].0-15
+        2..3: TH12  # ingress::hdr.ethernet.ether_type
+        B2: 1  # value 1 -> B2 bit[0]: ingress::hdr.ethernet.$valid
+        shift: 4
+        buf_req: 4
+        next: parse_ipv4
+      0x****:
+        0..1: TH10  # ingress::hdr.ethernet.src_addr[15:0].0-15
+        2..3: TH12  # ingress::hdr.ethernet.ether_type
+        B2: 1  # value 1 -> B2 bit[0]: ingress::hdr.ethernet.$valid
+        shift: 4
+        buf_req: 4
+        next: end
+    parse_ipv4:
+      *:
+        0..3: TW4
+            # - bit[0..3] -> TW4 bit[31..28]: ingress::hdr.ipv4.version
+            # - bit[4..7] -> TW4 bit[27..24]: ingress::hdr.ipv4.ihl
+            # - bit[8..15] -> TW4 bit[23..16]: ingress::hdr.ipv4.diffserv
+            # - bit[16..31] -> TW4 bit[15..0]: ingress::hdr.ipv4.total_len
+        4..7: TW7
+            # - bit[32..47] -> TW7 bit[31..16]: ingress::hdr.ipv4.identification
+            # - bit[48..50] -> TW7 bit[15..13]: ingress::hdr.ipv4.flags
+            # - bit[51..63] -> TW7 bit[12..0]: ingress::hdr.ipv4.frag_offset
+        8..11: TW6
+            # - bit[64..71] -> TW6 bit[31..24]: ingress::hdr.ipv4.ttl
+            # - bit[72..79] -> TW6 bit[23..16]: ingress::hdr.ipv4.protocol
+            # - bit[80..95] -> TW6 bit[15..0]: ingress::hdr.ipv4.hdr_checksum
+        12..15: TW9  # ingress::hdr.ipv4.src_addr
+        B2: 2  # value 1 -> B2 bit[1]: ingress::hdr.ipv4.$valid
+        load: { byte1 : 9 }
+        shift: 16
+        buf_req: 16
+        next: parse_ipv4.$split_0
+    parse_ipv4.$split_0:
+      match: [ byte1 ]
+      0x06:
+        0..3: TW8  # ingress::hdr.ipv4.dst_addr
+        4..5: TH9  # ingress::hdr.tcp.sport
+        6..7: TH8  # ingress::hdr.tcp.dport
+        8..11: TW11  # ingress::hdr.tcp.seq
+        12..15: TW10  # ingress::hdr.tcp.ack
+        16..19: TW5
+            # - bit[96..99] -> TW5 bit[31..28]: ingress::hdr.tcp.dataofs
+            # - bit[100..103] -> TW5 bit[27..24]: ingress::hdr.tcp.reserved
+            # - bit[104..111] -> TW5 bit[23..16]: ingress::hdr.tcp.flags
+            # - bit[112..127] -> TW5 bit[15..0]: ingress::hdr.tcp.window
+        20..21: TH7  # ingress::hdr.tcp.chksum
+        22..23: TH6  # ingress::hdr.tcp.urgptr
+        B2: 4  # value 1 -> B2 bit[2]: ingress::hdr.tcp.$valid
+        shift: 24
+        buf_req: 24
+        next: end
+      0x11:
+        0..3: TW8  # ingress::hdr.ipv4.dst_addr
+        4..5: TH7  # ingress::hdr.udp.sport
+        6..7: TH6  # ingress::hdr.udp.dport
+        8..11: TW5
+            # - bit[32..47] -> TW5 bit[31..16]: ingress::hdr.udp.len
+            # - bit[48..63] -> TW5 bit[15..0]: ingress::hdr.udp.chksum
+        B2: 8  # value 1 -> B2 bit[3]: ingress::hdr.udp.$valid
+        shift: 12
+        buf_req: 12
+        next: end
+      0x**:
+        0..3: TW8  # ingress::hdr.ipv4.dst_addr
+        shift: 4
+        buf_req: 4
+        next: end
+deparser ingress:
+  dictionary:
+    TH14: B2(0)  # ingress::hdr.ethernet.dst_addr.32-47 if ingress::hdr.ethernet.$valid
+    TB7: B2(0)  # ingress::hdr.ethernet.dst_addr.24-31 if ingress::hdr.ethernet.$valid
+    TB6: B2(0)  # ingress::hdr.ethernet.dst_addr.16-23 if ingress::hdr.ethernet.$valid
+    TB5: B2(0)  # ingress::hdr.ethernet.dst_addr.8-15 if ingress::hdr.ethernet.$valid
+    TB4: B2(0)  # ingress::hdr.ethernet.dst_addr.0-7 if ingress::hdr.ethernet.$valid
+    TH13: B2(0)  # ingress::hdr.ethernet.src_addr.32-47 if ingress::hdr.ethernet.$valid
+    TH11: B2(0)  # ingress::hdr.ethernet.src_addr.16-31 if ingress::hdr.ethernet.$valid
+    TH10: B2(0)  # ingress::hdr.ethernet.src_addr.0-15 if ingress::hdr.ethernet.$valid
+    TH12: B2(0)  # ingress::hdr.ethernet.ether_type if ingress::hdr.ethernet.$valid
+    TW4: B2(1)
+        # - bit[31..28]: ingress::hdr.ipv4.version if ingress::hdr.ipv4.$valid
+        # - bit[27..24]: ingress::hdr.ipv4.ihl if ingress::hdr.ipv4.$valid
+        # - bit[23..16]: ingress::hdr.ipv4.diffserv if ingress::hdr.ipv4.$valid
+        # - bit[15..0]: ingress::hdr.ipv4.total_len if ingress::hdr.ipv4.$valid
+    TW7: B2(1)
+        # - bit[31..16]: ingress::hdr.ipv4.identification if ingress::hdr.ipv4.$valid
+        # - bit[15..13]: ingress::hdr.ipv4.flags if ingress::hdr.ipv4.$valid
+        # - bit[12..0]: ingress::hdr.ipv4.frag_offset if ingress::hdr.ipv4.$valid
+    TW6: B2(1)
+        # - bit[31..24]: ingress::hdr.ipv4.ttl if ingress::hdr.ipv4.$valid
+        # - bit[23..16]: ingress::hdr.ipv4.protocol if ingress::hdr.ipv4.$valid
+        # - bit[15..0]: ingress::hdr.ipv4.hdr_checksum if ingress::hdr.ipv4.$valid
+    TW9: B2(1)  # ingress::hdr.ipv4.src_addr if ingress::hdr.ipv4.$valid
+    TW8: B2(1)  # ingress::hdr.ipv4.dst_addr if ingress::hdr.ipv4.$valid
+    TH9: B2(2)  # ingress::hdr.tcp.sport if ingress::hdr.tcp.$valid
+    TH8: B2(2)  # ingress::hdr.tcp.dport if ingress::hdr.tcp.$valid
+    TW11: B2(2)  # ingress::hdr.tcp.seq if ingress::hdr.tcp.$valid
+    TW10: B2(2)  # ingress::hdr.tcp.ack if ingress::hdr.tcp.$valid
+    TW5: B2(2)
+        # - bit[31..28]: ingress::hdr.tcp.dataofs if ingress::hdr.tcp.$valid
+        # - bit[27..24]: ingress::hdr.tcp.reserved if ingress::hdr.tcp.$valid
+        # - bit[23..16]: ingress::hdr.tcp.flags if ingress::hdr.tcp.$valid
+        # - bit[15..0]: ingress::hdr.tcp.window if ingress::hdr.tcp.$valid
+    TH7: B2(2)  # ingress::hdr.tcp.chksum if ingress::hdr.tcp.$valid
+    TH6: B2(2)  # ingress::hdr.tcp.urgptr if ingress::hdr.tcp.$valid
+    TH7: B2(3)  # ingress::hdr.udp.sport if ingress::hdr.udp.$valid
+    TH6: B2(3)  # ingress::hdr.udp.dport if ingress::hdr.udp.$valid
+    TW5: B2(3)
+        # - bit[31..16]: ingress::hdr.udp.len if ingress::hdr.udp.$valid
+        # - bit[15..0]: ingress::hdr.udp.chksum if ingress::hdr.udp.$valid
+  egress_unicast_port: H0(0..8)  # bit[8..0]: ingress::ig_intr_md_for_tm.ucast_egress_port
+  drop_ctl: B1(0..2)  # bit[2..0]: ingress::ig_intr_md_for_dprsr.drop_ctl
+  mirror:
+    select: B0(0..2)  # bit[2..0]: ingress::ig_intr_md_for_dprsr.mirror_type
+    0:
+      - H1(0..9)  # bit[9..0]: ingress::$tmp2
+parser egress:
+  start: $entry_point.start.min_parse_depth_accept_initial
+  init_zero: [ B16 ]
+  bitwise_or: [ B16 ]
+  hdr_len_adj: 27
+  meta_opt: 8191
+  states:
+    $entry_point.start.min_parse_depth_accept_initial:
+      *:
+        counter:
+          imm: 38
+        0..1: H16  # bit[7..15] -> H16 bit[8..0]: egress::eg_intr_md.egress_port
+        intr_md: 9
+        shift: 27
+        buf_req: 27
+        next: $entry_point.start.min_parse_depth_accept_initial.$ctr_stall0
+    $entry_point.start.min_parse_depth_accept_initial.$ctr_stall0:
+      *:
+        buf_req: 0
+        next: $entry_point.start.min_parse_depth_accept_initial.$split_0
+    $entry_point.start.min_parse_depth_accept_initial.$split_0:
+      match: [ ctr_neg, ctr_zero ]
+      0x0:
+        counter: dec 11
+        0: TB0  # egress::hdr.min_parse_depth_padding_0[0].packet_payload[87:80].80-87
+        1..2: TH18  # egress::hdr.min_parse_depth_padding_0[0].packet_payload[79:64].64-79
+        3..6: TW1  # egress::hdr.min_parse_depth_padding_0[0].packet_payload[63:32].32-63
+        7..10: TW0  # egress::hdr.min_parse_depth_padding_0[0].packet_payload[31:0].0-31
+        B16: 8  # value 8 -> B16 bit[3..0]: egress::hdr.min_parse_depth_padding_0.$stkvalid
+        shift: 11
+        buf_req: 11
+        next: min_parse_depth_accept_loop.$split_0
+      0b**:
+        buf_req: 0
+        next: end
+    min_parse_depth_accept_loop.$split_0:
+      match: [ ctr_neg, ctr_zero ]
+      option: ignore_max_depth
+      0x0:
+        counter: dec 11
+        0: TB1  # egress::hdr.min_parse_depth_padding_0[1].packet_payload[87:80].80-87
+        1..2: TH19  # egress::hdr.min_parse_depth_padding_0[1].packet_payload[79:64].64-79
+        3..6: TW3  # egress::hdr.min_parse_depth_padding_0[1].packet_payload[63:32].32-63
+        7..10: TW2  # egress::hdr.min_parse_depth_padding_0[1].packet_payload[31:0].0-31
+        B16: 4  # value 4 -> B16 bit[3..0]: egress::hdr.min_parse_depth_padding_0.$stkvalid
+        shift: 11
+        buf_req: 11
+        next: min_parse_depth_accept_loop.$it1.$split_0
+      0b**:
+        buf_req: 0
+        next: end
+    min_parse_depth_accept_loop.$it1.$split_0:
+      match: [ ctr_neg, ctr_zero ]
+      option: ignore_max_depth
+      0x0:
+        counter: dec 11
+        0: TB2  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[87:80].80-87
+        1..2: TH20  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[79:64].64-79
+        3..4: TH3  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[63:48].48-63
+        5..6: TH2  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[47:32].32-47
+        7..8: TH1  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[31:16].16-31
+        B16: 2  # value 2 -> B16 bit[3..0]: egress::hdr.min_parse_depth_padding_0.$stkvalid
+        shift: 9
+        buf_req: 9
+        next: min_parse_depth_accept_loop.$it2.$split_0
+      0b**:
+        buf_req: 0
+        next: end
+    min_parse_depth_accept_loop.$it2.$split_0:
+      match: [ ctr_neg, ctr_zero ]
+      option: ignore_max_depth
+      0x0:
+        counter: dec 11
+        0..1: TH0  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[15:0].0-15
+        2: TB3  # egress::hdr.min_parse_depth_padding_0[3].packet_payload[87:80].80-87
+        3..4: TH21  # egress::hdr.min_parse_depth_padding_0[3].packet_payload[79:64].64-79
+        5..8: TW12  # egress::hdr.min_parse_depth_padding_0[3].packet_payload[63:32].32-63
+        9..10: TH5  # egress::hdr.min_parse_depth_padding_0[3].packet_payload[31:16].16-31
+        11..12: TH4  # egress::hdr.min_parse_depth_padding_0[3].packet_payload[15:0].0-15
+        B16: 1  # value 1 -> B16 bit[3..0]: egress::hdr.min_parse_depth_padding_0.$stkvalid
+        shift: 13
+        buf_req: 13
+        next: end
+      0b**:
+        0..1: TH0  # egress::hdr.min_parse_depth_padding_0[2].packet_payload[15:0].0-15
+        shift: 2
+        buf_req: 2
+        next: end
+deparser egress:
+  dictionary:
+    TB0: B16(3)  # egress::hdr.min_parse_depth_padding_0[0].packet_payload.80-87 if egress::hdr.min_parse_depth_padding_0[0].$valid
+    TH18: B16(3)  # egress::hdr.min_parse_depth_padding_0[0].packet_payload.64-79 if egress::hdr.min_parse_depth_padding_0[0].$valid
+    TW1: B16(3)  # egress::hdr.min_parse_depth_padding_0[0].packet_payload.32-63 if egress::hdr.min_parse_depth_padding_0[0].$valid
+    TW0: B16(3)  # egress::hdr.min_parse_depth_padding_0[0].packet_payload.0-31 if egress::hdr.min_parse_depth_padding_0[0].$valid
+    TB1: B16(2)  # egress::hdr.min_parse_depth_padding_0[1].packet_payload.80-87 if egress::hdr.min_parse_depth_padding_0[1].$valid
+    TH19: B16(2)  # egress::hdr.min_parse_depth_padding_0[1].packet_payload.64-79 if egress::hdr.min_parse_depth_padding_0[1].$valid
+    TW3: B16(2)  # egress::hdr.min_parse_depth_padding_0[1].packet_payload.32-63 if egress::hdr.min_parse_depth_padding_0[1].$valid
+    TW2: B16(2)  # egress::hdr.min_parse_depth_padding_0[1].packet_payload.0-31 if egress::hdr.min_parse_depth_padding_0[1].$valid
+    TB2: B16(1)  # egress::hdr.min_parse_depth_padding_0[2].packet_payload.80-87 if egress::hdr.min_parse_depth_padding_0[2].$valid
+    TH20: B16(1)  # egress::hdr.min_parse_depth_padding_0[2].packet_payload.64-79 if egress::hdr.min_parse_depth_padding_0[2].$valid
+    TH3: B16(1)  # egress::hdr.min_parse_depth_padding_0[2].packet_payload.48-63 if egress::hdr.min_parse_depth_padding_0[2].$valid
+    TH2: B16(1)  # egress::hdr.min_parse_depth_padding_0[2].packet_payload.32-47 if egress::hdr.min_parse_depth_padding_0[2].$valid
+    TH1: B16(1)  # egress::hdr.min_parse_depth_padding_0[2].packet_payload.16-31 if egress::hdr.min_parse_depth_padding_0[2].$valid
+    TH0: B16(1)  # egress::hdr.min_parse_depth_padding_0[2].packet_payload.0-15 if egress::hdr.min_parse_depth_padding_0[2].$valid
+    TB3: B16(0)  # egress::hdr.min_parse_depth_padding_0[3].packet_payload.80-87 if egress::hdr.min_parse_depth_padding_0[3].$valid
+    TH21: B16(0)  # egress::hdr.min_parse_depth_padding_0[3].packet_payload.64-79 if egress::hdr.min_parse_depth_padding_0[3].$valid
+    TW12: B16(0)  # egress::hdr.min_parse_depth_padding_0[3].packet_payload.32-63 if egress::hdr.min_parse_depth_padding_0[3].$valid
+    TH5: B16(0)  # egress::hdr.min_parse_depth_padding_0[3].packet_payload.16-31 if egress::hdr.min_parse_depth_padding_0[3].$valid
+    TH4: B16(0)  # egress::hdr.min_parse_depth_padding_0[3].packet_payload.0-15 if egress::hdr.min_parse_depth_padding_0[3].$valid
+  egress_unicast_port: H16(0..8)  # bit[8..0]: egress::eg_intr_md.egress_port
+stage 0 ingress:
+  phase0_match IngressParser.$PORT_METADATA:
+    p4:
+      name: IngressParser.$PORT_METADATA
+      size: 288
+      preferred_match_type: exact
+      match_type: exact
+    size: 288
+    p4_param_order:
+      ig_intr_md.ingress_port: { type: exact, size: 9 }
+    format: {ig_intr_md: 0..63}
+    constant_value: 0
+    actions:
+      set_port_metadata:
+      - handle: 0x20000000
+      - p4_param_order: { ig_intr_md: 64 } 
+  exact_match forwarding_0 0:
+    p4: { name: Ingress.forwarding, size: 512 }
+    p4_param_order: 
+      ig_intr_md.ingress_port: { type: exact, size: 9, full_size: 9 }
+    row: 7
+    bus: 0
+    column: 2
+    stash: 
+      row: [ 7 ]
+      col: [ 2 ]
+      unit: [ 0 ]
+    ways:
+      - { group: 0, index: 0..9, select: 40..51 & 0x0, rams: [[7, 2]] }
+    input_xbar:
+      exact group 0: { 0: ig_intr_md.ingress_port }
+      hash 0:
+        0..7: ig_intr_md.ingress_port(0..7)
+        8: ig_intr_md.ingress_port(8)
+      hash group 0:
+        table: [0]
+        seed: 0x0
+    format: { action(0): 0..0, immediate(0): 5..13, version(0): 112..115, action(1): 1..1, immediate(1): 14..22, version(1): 116..119, action(2): 2..2, immediate(2): 23..31, version(2): 120..123, action(3): 3..3, immediate(3): 32..40, version(3): 124..127, action(4): 4..4, immediate(4): 41..49, version(4): 56..59 }
+    match_group_map: [ [ 0, 1, 2, 3, 4 ] ]
+    hit: [  END ]
+    miss:  END
+    action_bus: { 32..33 : immediate(0..8) }
+    instruction: forwarding_0(action, $DEFAULT)
+    actions:
+      Ingress.send_using_port(0, 1):
+      - p4_param_order: { port: 9 }
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true }
+      - handle: 0x20000001
+      - next_table: 0
+      - { port: immediate(0..8) }
+      - set ig_intr_md_for_tm.ucast_egress_port, port
+      Ingress.drop(1, 2):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true }
+      - handle: 0x20000002
+      - next_table: 0
+      - {  }
+      - set ig_intr_md_for_dprsr.drop_ctl, 1
+      NoAction(-1, 0):
+      - hit_allowed: { allowed: false, reason: user_indicated_default_only }
+      - default_only_action: { allowed: true }
+      - handle: 0x20000003
+      - next_table: 0
+      - {  }
+    default_only_action: NoAction
+
+
+primitives: "basic.prim.json"
+dynhash: "basic.dynhash.json"

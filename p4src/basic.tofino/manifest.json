@@ -1,0 +1,60 @@
+{
+  "schema_version": "3.0.1",
+  "target": "tofino",
+  "build_date": "Thu Nov  6 09:03:04 2025",
+  "compiler_version": "9.13.4 (17ade03c1)",
+  "compilation_succeeded": true,
+  "compilation_time": "1.839036464691162",
+  "run_id": "5ae3bfd56acc4711",
+  "target_data": {
+    "architecture": "tna",
+    "architectureConfig": {
+      "name": "64q",
+      "pipes": [
+        {
+          "pipe": 0,
+          "ingress": {
+            "pipeName": "Ingress",
+            "nextControl": [
+              {
+                "pipe": 0,
+                "pipeName": "Egress"
+              }
+            ]
+          },
+          "egress": {
+            "pipeName": "Egress",
+            "nextControl": []
+          }
+        }
+      ]
+    },
+    "conf_file": "basic.conf"
+  },
+  "programs": [
+    {
+      "program_name": "basic.p4",
+      "p4_version": "p4-16",
+      "source_files": {
+        "src_root": "/home/ubuntu/Downloads/lab2/p4src",
+        "includes": [],
+        "defines": []
+      },
+      "pipes": [
+        {
+          "pipe_id": 0,
+          "pipe_name": "pipe",
+          "files": {
+            "context": {
+              "path": "pipe/context.json"
+            },
+            "resources": [],
+            "graphs": [],
+            "logs": []
+          }
+        }
+      ]
+    }
+  ],
+  "compile_command": "/home/ubuntu/open-p4studio/build/pkgsrc/p4-compilers/p4c/bf-p4c -b tofino basic.p4"
+}
