@@ -1,11 +1,11 @@
 {
   "schema_version": "3.0.1",
   "target": "tofino",
-  "build_date": "Thu Nov  6 09:03:04 2025",
+  "build_date": "Sat Nov  8 11:06:31 2025",
   "compiler_version": "9.13.4 (17ade03c1)",
   "compilation_succeeded": true,
-  "compilation_time": "1.839036464691162",
-  "run_id": "5ae3bfd56acc4711",
+  "compilation_time": "2.1270103454589844",
+  "run_id": "ca768da450ff41e8",
   "target_data": {
     "architecture": "tna",
     "architectureConfig": {
@@ -36,7 +36,7 @@
       "program_name": "basic.p4",
       "p4_version": "p4-16",
       "source_files": {
-        "src_root": "/home/ubuntu/Downloads/lab2/p4src",
+        "src_root": "/home/ubuntu/Desktop/P4_Code/p4src",
         "includes": [],
         "defines": []
       },
@@ -56,5 +56,5 @@
       ]
     }
   ],
-  "compile_command": "/home/ubuntu/open-p4studio/build/pkgsrc/p4-compilers/p4c/bf-p4c -b tofino basic.p4"
+  "compile_command": "/home/ubuntu/open-p4studio/build/pkgsrc/p4-compilers/p4c/p4c basic.p4"
 }

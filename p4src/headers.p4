@@ -3,11 +3,8 @@
 **************************************************************************/
 const bit<16> ETHERTYPE_TPID = 0x8100;
 const bit<16> ETHERTYPE_IPV4 = 0x0800;
-
-const bit<8>  IP_PROTO_TCP   = 6;
-const bit<8>  IP_PROTO_UDP   = 17;
-const bit<16> TCP_PORT_HTTPS = 443;
-
+const bit<8>  IP_PROTOCOL_TCP = 6;
+const bit<8>  IP_PROTOCOL_UDP = 17;
 /*************************************************************************
  ***********************  H E A D E R S  *********************************
  *************************************************************************/
@@ -63,25 +60,24 @@ struct my_ingress_headers_t {
 
 /******  G L O B A L   I N G R E S S   M E T A D A T A  *********/
 struct my_ingress_metadata_t {
-    bit<1>  is_tcp;    // set in ingress if packet is TCP
-    bit<1>  is_https;  // subset of TCP: port 443
-    bit<16> flow_idx;  // CRC16 bucket index
-    bit<16> pkt_len;   // copy of packet length (ingress)
+    bit<1>     is_tcp;
+    bit<1>     is_https;
+    bit<16>    flow_idx;  // CRC16 bucket index
+    bit<16>    pkt_len;   // copy of ingress intrinsic length
+
 }
 
 
 
 /***********************  E G R E S S  H E A D E R S  ***************************/
-/* We don't re-parse user headers in egress, so this can stay empty. */
-struct my_egress_headers_t {
 
+struct my_egress_headers_t {
+    ethernet_h ethernet;
+    ipv4_h     ipv4;
+    tcp_h      tcp;
 }
 
 /********  G L O B A L   E G R E S S   M E T A D A T A  *********/
 
 struct my_egress_metadata_t {
-    bit<1>  is_tcp;
-    bit<1>  is_https;
-    bit<16> flow_idx;
-    bit<16> pkt_len;
 }
