@@ -8,7 +8,7 @@
 #include "egress.p4"
 #include "egress_deparser.p4"
 
-
+/*  bf-p4c -b tofino basic.p4 */
 /* Insert the block below this comment */ 
 Pipeline(
     IngressParser(),

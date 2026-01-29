@@ -27,8 +27,8 @@ parser IngressParser(packet_in        pkt,
     state parse_ipv4 {
         pkt.extract(hdr.ipv4);
 		transition select(hdr.ipv4.protocol) {
-            6: parse_tcp;
-			17: parse_udp;
+            IP_PROTOCOL_TCP: parse_tcp;
+            IP_PROTOCOL_UDP: parse_udp;
 			default: accept;
 		}
 	}
