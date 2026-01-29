@@ -1,0 +1,12 @@
+-Loading the programming environment for the Tofino model: set_env.sh lab2 model
+-Configure environment variables: source config_env.sh
+-Compile: ~/tools/p4_build.sh --with-p4c=bf-p4c p4src/basic.p4
+-Verify the output files for the program basic are generated: ls $SDE/build/p4-build/basic
+-The binary file that corresponds to the compiled data plane is located under $SDE/build/p4-build/<program_name>/tofino/<program_name>/pipe/. Use the command below to display the contents of this directory: ls $SDE/build/p4-build/basic/tofino/basic/pipe/
+-Issue the command below to start the Tofino model (in terminal): ./run_tofino_model.sh -f ports.json -p basic
+-Open new tab, then: ssh root@172.168.1.1
+-Issue the following command to run the switch daemon with the P4 program basic: ./run_switchd.sh -p basic
+-In VS Code terminal, push the table entries to the Tofino model switch by typing the following command. The table entries indicate the port that received packets must take to reach the right destination: Page 22
+$SDE/./run_bfshell.sh --no-status-srv -b /root/P4_labs/lab2/bfrt_python/setup.py
+-Issue the following command to start listening for incoming packets on the interface facing PC1 through the Tofino model switch (i.e., eth0). When prompted for a password, type password: sudo ./recv.py eth0
+-In the new Linux terminal, issue the command below to send a packet to PC2 via the Tofino model switch. When prompted for a password, type password.: sudo ./send.py 10.0.0.2 eth0 HelloWorld
