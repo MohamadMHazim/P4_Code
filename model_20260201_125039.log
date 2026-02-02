@@ -1,0 +1,31 @@
+:02-01 12:51:02.599340:    Setting logging fn
+:02-01 12:51:02.599396:    Registering handler for tx
+:02-01 12:51:02.599461:     Updating model log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000000f
+:02-01 12:51:02.602885:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 0 but P4 names have not been loaded.
+:02-01 12:51:02.603191:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 1 but P4 names have not been loaded.
+:02-01 12:51:02.603205:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 2 but P4 names have not been loaded.
+:02-01 12:51:02.603212:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 3 but P4 names have not been loaded.
+:02-01 12:51:02.603220:    :-:-:<0,0,0>:Updating p4 log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000007f
+:02-01 12:51:02.606362:    :-:-:<0,0,0>:Updating tofino log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000007f
+:02-01 12:51:02.610922:    :-:-:<0,0,0>:Updating packet log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000007f
+:02-01 12:51:18.056421:    :-:-:<0,-,0>:Begin packet processing
+:02-01 12:51:18.056663:    :0x1:-:<0,0,0>:========== Ingress Pkt from port 0 (86 bytes)  ==========
+:02-01 12:51:18.056685:    :0x1:-:<0,0,0>:Packet :
+:02-01 12:51:18.056691:        :0x1:-:<0,0,0>:01 00 5e 00 00 fb 96 ff 57 58 0e c9 08 00 45 00 
+:02-01 12:51:18.056696:        :0x1:-:<0,0,0>:00 44 46 2b 40 00 ff 11 4a 81 0a 00 00 01 e0 00 
+:02-01 12:51:18.056701:        :0x1:-:<0,0,0>:00 fb 14 e9 14 e9 00 30 db 94 00 00 00 00 00 01 
+:02-01 12:51:18.056705:        :0x1:-:<0,0,0>:00 00 00 00 00 00 0b 5f 70 67 70 6b 65 79 2d 68 
+:02-01 12:51:18.056715:    :0x1:-:<0,0,->:========== Packet to input parser: from port 0 (86 bytes)  ==========
+========== Packet DROPPED: channel disabled in IPB          ==========
+:02-01 12:51:18.056749:    :0x2:-:<0,0,0>:========== Ingress Pkt from port 1 (86 bytes)  ==========
+:02-01 12:51:18.056753:    :0x2:-:<0,0,0>:Packet :
+:02-01 12:51:18.056758:        :0x2:-:<0,0,0>:01 00 5e 00 00 fb 4e 3a 9b 2d aa d1 08 00 45 00 
+:02-01 12:51:18.056824:        :0x2:-:<0,0,0>:00 44 43 0c 40 00 ff 11 4d 9f 0a 00 00 02 e0 00 
+:02-01 12:51:18.056833:        :0x2:-:<0,0,0>:00 fb 14 e9 14 e9 00 30 db 93 00 00 00 00 00 01 
+:02-01 12:51:18.056838:        :0x2:-:<0,0,0>:00 00 00 00 00 00 0b 5f 70 67 70 6b 65 79 2d 68 
+:02-01 12:51:18.056843:    :0x2:-:<0,0,->:========== Packet to input parser: from port 1 (86 bytes)  ==========
+========== Packet DROPPED: channel disabled in IPB          ==========
+:02-01 12:51:18.056925:    :-:-:<0,-,0>:Waiting for packets to process
+:02-01 12:52:56.445558:    :-:-:<0,-,0>:Begin packet processing
+:02-01 12:52:56.445691:    :-:-:<0,-,0>:Chip=0 Thread=0 Pipe=0: PktsIn=2 PktsOut=0
+:02-01 12:52:56.445705:    :-:-:<0,-,0>:Chip=0 Thread=0 Pipe=*: PktsIn=2 PktsOut=0 PktsTOT=2  Waits=12

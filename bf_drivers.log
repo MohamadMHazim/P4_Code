@@ -1,0 +1,394 @@
+2026-01-31 11:05:56.174543 DEBUG BF_SWITCHD bf_switchd: system services initialized
+2026-01-31 11:05:56.174693 DEBUG BF_SWITCHD bf_switchd: loading conf_file /home/ubuntu/P4_Code/p4src/bf_switchd.conf...
+2026-01-31 11:05:56.174715 DEBUG BF_SWITCHD bf_switchd: processing device configuration...
+2026-01-31 11:05:56.174787 ERROR BF_SWITCHD Error in config file at line 1:
+[###############################################################################]
+2026-01-31 11:05:56.174840 ERROR BF_SWITCHD Loading conf_file failed :-22
+2026-01-31 11:06:46.836865 DEBUG BF_SWITCHD bf_switchd: system services initialized
+2026-01-31 11:06:46.836935 DEBUG BF_SWITCHD bf_switchd: loading conf_file /home/ubuntu/P4_Code/p4src/bf_switchd.conf...
+2026-01-31 11:06:46.836954 DEBUG BF_SWITCHD bf_switchd: processing device configuration...
+2026-01-31 11:06:46.836971 ERROR BF_SWITCHD Error in config file at line 1:
+[bf_switchd {]
+2026-01-31 11:06:46.837020 ERROR BF_SWITCHD Loading conf_file failed :-22
+2026-02-01 12:41:09.588412 DEBUG BF_SWITCHD bf_switchd: system services initialized
+2026-02-01 12:41:09.589182 DEBUG BF_SWITCHD bf_switchd: loading conf_file /home/ubuntu/P4_Code/p4src/basic.tofino/basic.conf...
+2026-02-01 12:41:09.589215 ERROR BF_SWITCHD Could not open conf file /home/ubuntu/P4_Code/p4src/basic.tofino/basic.conf
+2026-02-01 12:41:09.589429 ERROR BF_SWITCHD Loading conf_file failed :-2
+2026-02-01 12:44:42.366753 DEBUG BF_SWITCHD bf_switchd: system services initialized
+2026-02-01 12:44:42.366984 DEBUG BF_SWITCHD bf_switchd: loading conf_file /home/ubuntu/P4_Code/p4src/basic.tofino/basic.conf...
+2026-02-01 12:44:42.367010 DEBUG BF_SWITCHD bf_switchd: processing device configuration...
+2026-02-01 12:44:42.386871 DEBUG BF_SWITCHD Configuration for dev_id 0
+2026-02-01 12:44:42.387893 DEBUG BF_SWITCHD   Family        : tofino
+2026-02-01 12:44:42.387916 DEBUG BF_SWITCHD   pci_sysfs_str : /sys/devices/pci0000:00/0000:00:03.0/0000:05:00.0
+2026-02-01 12:44:42.387922 DEBUG BF_SWITCHD   pci_int_mode  : 0
+2026-02-01 12:44:42.387927 DEBUG BF_SWITCHD   sds_fw_path   : share/tofino_sds_fw/avago/firmware
+2026-02-01 12:44:42.387932 DEBUG BF_SWITCHD bf_switchd: processing P4 configuration...
+2026-02-01 12:44:42.393317 DEBUG BF_SWITCHD coal_mirror_enable=0 coal_min=0 sessions_num=0
+2026-02-01 12:44:42.394441 DEBUG BF_SWITCHD P4 profile for dev_id 0
+2026-02-01 12:44:42.394461 DEBUG BF_SWITCHD num P4 programs 1
+2026-02-01 12:44:42.394466 DEBUG BF_SWITCHD   p4_name: basic
+2026-02-01 12:44:42.394470 DEBUG BF_SWITCHD   p4_pipeline_name: pipe
+2026-02-01 12:44:42.394474 DEBUG BF_SWITCHD     libpd: 
+2026-02-01 12:44:42.394478 DEBUG BF_SWITCHD     libpdthrift: 
+2026-02-01 12:44:42.394482 DEBUG BF_SWITCHD     context: /home/ubuntu/open-p4studio/install/pipe/context.json
+2026-02-01 12:44:42.394486 DEBUG BF_SWITCHD     config: /home/ubuntu/open-p4studio/install/pipe/tofino.bin
+2026-02-01 12:44:42.394490 DEBUG BF_SWITCHD   Pipes in scope [
+2026-02-01 12:44:42.394494 DEBUG BF_SWITCHD 0 
+2026-02-01 12:44:42.397713 DEBUG BF_SWITCHD 1 
+2026-02-01 12:44:42.397722 DEBUG BF_SWITCHD 2 
+2026-02-01 12:44:42.397729 DEBUG BF_SWITCHD 3 
+2026-02-01 12:44:42.397736 DEBUG BF_SWITCHD ]
+2026-02-01 12:44:42.397747 DEBUG BF_SWITCHD   diag: 
+2026-02-01 12:44:42.397754 DEBUG BF_SWITCHD   accton diag: 
+2026-02-01 12:44:42.397761 DEBUG BF_SWITCHD   Agent[0]: /home/ubuntu/open-p4studio/install/lib/libpltfm_mgr.so
+2026-02-01 12:44:42.427372 DEBUG BF_SWITCHD bf_switch: Operational mode set to default: MODEL
+2026-02-01 12:44:42.427494 DEBUG BF_DVM BF-SDE vesion: 9.13.4
+2026-02-01 12:44:42.432952 INFO  BF_PM pm_fsm_queues_init:342 pm_fsm_queues_init:342 Initializing all FSM queues
+2026-02-01 12:44:42.433079 INFO  BF_PM pm_fsm_queues_init:348 pm_fsm_queues_init:348 Initializing all FSM queues done
+2026-02-01 12:44:42.457976 INFO  BF_TM TM: Registered for device and port discovery
+2026-02-01 12:44:42.486032 DEBUG BF_SWITCHD bf_switchd: drivers initialized
+2026-02-01 12:44:42.486381 DEBUG BF_SWITCHD bf_switchd: initializing dru_sim service
+2026-02-01 12:44:42.487588 DEBUG BF_SWITCHD bf_switchd: library libdru_sim.so loaded
+2026-02-01 12:44:44.286175 INFO  BF_DVM bf_pktmgr_device_add dev id 0, is_sw_model 1
+2026-02-01 12:44:44.288327 DEBUG BF_LLD  Efuse settings dev 0 subdev 0
+2026-02-01 12:44:44.288398 DEBUG BF_LLD                0 : resubmit_disable
+2026-02-01 12:44:44.288407 DEBUG BF_LLD                0 : mau_tcam_reduction
+2026-02-01 12:44:44.288413 DEBUG BF_LLD                0 : mau_sram_reduction
+2026-02-01 12:44:44.288418 DEBUG BF_LLD                0 : packet_generator_disable
+2026-02-01 12:44:44.288423 DEBUG BF_LLD                0 : pipe_disable
+2026-02-01 12:44:44.288511 DEBUG BF_LLD                0 : mau_stage_disable
+2026-02-01 12:44:44.288538 DEBUG BF_LLD 0000000000000000 : port_disable (hi)
+2026-02-01 12:44:44.288543 DEBUG BF_LLD 0000000000000000 : port_disable (lo)
+2026-02-01 12:44:44.288547 DEBUG BF_LLD 0000000000000000 : tm_memory_disable
+2026-02-01 12:44:44.288552 DEBUG BF_LLD                0 : port_speed_reduction
+2026-02-01 12:44:44.288556 DEBUG BF_LLD                0 : cpu_port_speed_reduction
+2026-02-01 12:44:44.288560 DEBUG BF_LLD                0 : pcie_lane_reduction
+2026-02-01 12:44:44.288565 DEBUG BF_LLD                0 : baresync_disable
+2026-02-01 12:44:44.288569 DEBUG BF_LLD                0 : frequency_reduction
+2026-02-01 12:44:44.288574 DEBUG BF_LLD                0 : frequency_check_disable
+2026-02-01 12:44:44.288577 DEBUG BF_LLD                0 : versioning
+2026-02-01 12:44:44.288584 DEBUG BF_LLD                0 : chip_part_number
+2026-02-01 12:44:44.288589 DEBUG BF_LLD                0 : part_revision_number
+2026-02-01 12:44:44.288595 DEBUG BF_LLD                0 : package_id
+2026-02-01 12:44:44.288599 DEBUG BF_LLD 0000000000000000 : chip_id
+2026-02-01 12:44:44.288604 DEBUG BF_LLD                0 : pmro_and_skew
+2026-02-01 12:44:44.288609 DEBUG BF_LLD                0 : voltage_scaling
+2026-02-01 12:44:44.288613 DEBUG BF_LLD                0 : die-config
+2026-02-01 12:44:44.288617 DEBUG BF_LLD                0 : constant0
+2026-02-01 12:44:44.288622 DEBUG BF_LLD                0 : constant1
+2026-02-01 12:44:44.288626 DEBUG BF_LLD                0 : serdes disable even
+2026-02-01 12:44:44.288631 DEBUG BF_LLD                0 : serdes disable odd
+2026-02-01 12:44:44.288638 DEBUG BF_LLD Wafer-id: 
+2026-02-01 12:44:44.288918 DEBUG BF_LLD dev 0 subdev 0: SPI idcode: 0bad0bad (rc=0)
+2026-02-01 12:44:44.289240 DEBUG BF_LLD TCU: 0 : WARNING: device requires Power-on Reset: <0bad0bad>
+2026-02-01 12:44:44.289301 DEBUG BF_LLD TCU: 0 : Flush..
+2026-02-01 12:44:44.297570 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.297765 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.297803 DEBUG BF_LLD TCU: 0 : Flush done
+2026-02-01 12:44:44.297834 DEBUG BF_LLD TCU: 0 : Repair..
+2026-02-01 12:44:44.300148 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.301284 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.311625 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.313338 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.322804 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.329260 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.337877 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.346216 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.348494 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.349584 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.352429 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.353532 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.355526 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.356595 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.358494 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.360085 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.461401 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.462240 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.463959 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.464392 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.465470 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.465605 DEBUG BF_LLD ERROR: tcu_wrack register value is not correct on dev=0. Expected : 0x01 , Actual : 0xbad0bad
+2026-02-01 12:44:44.465816 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:44:44.465860 DEBUG BF_LLD ERROR: tcu_status register value is not correct on dev=0. Expected : 0x2a , Actual : 0xbad0bad
+2026-02-01 12:44:44.493510 DEBUG BF_LLD TCU: 0 : Repair done.
+2026-02-01 12:44:44.798095 DEBUG BF_LLD EFUSE: Set core clk to 1.22GHz, dev=0, PLL ctrl0 value=0xcd44cbfe
+2026-02-01 12:44:45.054367 DEBUG BF_LLD Core PLL has not locked even after 100 ms; PLL Lock chip 0 dbg_rst 0
+2026-02-01 12:44:45.384224 DEBUG BF_LLD [Unreset] Done after 1 polls
+2026-02-01 12:44:46.038157 DEBUG BF_LLD DR flush still asserted: dev 0 mbus bad0bad cbus bad0bad pbus bad0bad tbus 1
+2026-02-01 12:44:46.130431 INFO  BF_DVM bf_device_add dev id 0, is_sw_model 1
+2026-02-01 12:44:46.130573 DEBUG BF_PORT port_mgr_dev_add:59:0:0(warm_init_mode)
+2026-02-01 12:44:46.130629 DEBUG BF_PORT port_mgr_tof1_dev_add:78:0
+2026-02-01 12:44:46.131093 INFO  BF_PORT set chip part revision number, dev 0, part rev 0
+2026-02-01 12:44:46.131242 DEBUG BF_PORT 0:-:-: sbus master fw: 0000_0000
+2026-02-01 12:44:46.131251 DEBUG BF_PORT 0:-:-: PCIe serdes fw: 0000_0000
+2026-02-01 12:44:46.131254 DEBUG BF_PORT 0:-:-:      serdes fw: 0000_0000
+2026-02-01 12:44:46.131290 INFO  BF_PORT port_mgr_mac_block_init: core clock speed in ns = 0.819672
+2026-02-01 12:44:46.191279 ERROR BF_PIPE pipe_mgr_ctx_json_parse:6884: Could not open configuration file: /home/ubuntu/open-p4studio/install/pipe/context.json.
+
+2026-02-01 12:44:46.191491 ERROR BF_PIPE pipe_mgr_rmt_import : Error in parsing the context jSON file
+2026-02-01 12:44:46.192692 ERROR BF_PIPE pipe_mgr_add_rmt_device: failed to import rmt config
+2026-02-01 12:44:46.193066 ERROR BF_PIPE pipe_mgr_add_device: failed to instantiate device No system resources 2
+2026-02-01 12:44:46.193536 ERROR BF_DVM Device add handling failed for dev 0, sts No system resources (2), Client pipe-mgr 
+2026-02-01 12:44:46.193592 ERROR BF_DVM Device add failed for dev 0, sts No system resources (2)
+2026-02-01 12:44:46.194884 ERROR BF_TM TM: tm_remove_device called without valid tm_ctx for device 0
+2026-02-01 12:44:46.199941 ERROR BF_PIPE pipe_mgr_remove_device: failed to de-instantiate device 0, err Object not found
+2026-02-01 12:44:46.200029 DEBUG BF_PORT port_mgr_dev_remove:103:0
+2026-02-01 12:44:46.200039 DEBUG BF_PORT port_mgr_tof1_dev_remove:200:0
+2026-02-01 12:44:46.201462 ERROR BF_SWITCHD ERROR: bf_device_add failed(2) for dev_id 0
+2026-02-01 12:44:46.201754 ERROR BF_SWITCHD ERROR: bf_switchd_device_add failed(No system resources) for dev_id 0
+2026-02-01 12:44:46.202017 DEBUG BF_SWITCHD bf_switchd: initialized 0 devices
+2026-02-01 12:44:46.202077 DEBUG BF_SWITCHD bf_switchd: spawning cli server thread
+2026-02-01 12:44:46.202314 DEBUG BF_SWITCHD bf_switchd: spawning driver shell
+2026-02-01 12:44:46.202404 DEBUG BF_SWITCHD bf_switchd: server started - listening on port 9999
+2026-02-01 12:51:00.178586 DEBUG BF_SWITCHD bf_switchd: system services initialized
+2026-02-01 12:51:00.178648 DEBUG BF_SWITCHD bf_switchd: loading conf_file /home/ubuntu/P4_Code/p4src/basic.tofino/basic.conf...
+2026-02-01 12:51:00.178668 DEBUG BF_SWITCHD bf_switchd: processing device configuration...
+2026-02-01 12:51:00.179536 DEBUG BF_SWITCHD Configuration for dev_id 0
+2026-02-01 12:51:00.179599 DEBUG BF_SWITCHD   Family        : tofino
+2026-02-01 12:51:00.179613 DEBUG BF_SWITCHD   pci_sysfs_str : /sys/devices/pci0000:00/0000:00:03.0/0000:05:00.0
+2026-02-01 12:51:00.179617 DEBUG BF_SWITCHD   pci_int_mode  : 0
+2026-02-01 12:51:00.179621 DEBUG BF_SWITCHD   sds_fw_path   : share/tofino_sds_fw/avago/firmware
+2026-02-01 12:51:00.179625 DEBUG BF_SWITCHD bf_switchd: processing P4 configuration...
+2026-02-01 12:51:00.179650 DEBUG BF_SWITCHD coal_mirror_enable=0 coal_min=0 sessions_num=0
+2026-02-01 12:51:00.179656 DEBUG BF_SWITCHD P4 profile for dev_id 0
+2026-02-01 12:51:00.179660 DEBUG BF_SWITCHD num P4 programs 1
+2026-02-01 12:51:00.179664 DEBUG BF_SWITCHD   p4_name: basic
+2026-02-01 12:51:00.179668 DEBUG BF_SWITCHD   p4_pipeline_name: pipe
+2026-02-01 12:51:00.179672 DEBUG BF_SWITCHD     libpd: 
+2026-02-01 12:51:00.179728 DEBUG BF_SWITCHD     libpdthrift: 
+2026-02-01 12:51:00.179735 DEBUG BF_SWITCHD     context: /home/ubuntu/open-p4studio/install/pipe/context.json
+2026-02-01 12:51:00.179739 DEBUG BF_SWITCHD     config: /home/ubuntu/open-p4studio/install/pipe/tofino.bin
+2026-02-01 12:51:00.179743 DEBUG BF_SWITCHD   Pipes in scope [
+2026-02-01 12:51:00.179747 DEBUG BF_SWITCHD 0 
+2026-02-01 12:51:00.179755 DEBUG BF_SWITCHD 1 
+2026-02-01 12:51:00.179758 DEBUG BF_SWITCHD 2 
+2026-02-01 12:51:00.179762 DEBUG BF_SWITCHD 3 
+2026-02-01 12:51:00.179766 DEBUG BF_SWITCHD ]
+2026-02-01 12:51:00.179772 DEBUG BF_SWITCHD   diag: 
+2026-02-01 12:51:00.179775 DEBUG BF_SWITCHD   accton diag: 
+2026-02-01 12:51:00.179780 DEBUG BF_SWITCHD   Agent[0]: /home/ubuntu/open-p4studio/install/lib/libpltfm_mgr.so
+2026-02-01 12:51:00.180290 DEBUG BF_SWITCHD bf_switch: Operational mode set to default: MODEL
+2026-02-01 12:51:00.180426 DEBUG BF_DVM BF-SDE vesion: 9.13.4
+2026-02-01 12:51:00.184817 INFO  BF_PM pm_fsm_queues_init:342 pm_fsm_queues_init:342 Initializing all FSM queues
+2026-02-01 12:51:00.184947 INFO  BF_PM pm_fsm_queues_init:348 pm_fsm_queues_init:348 Initializing all FSM queues done
+2026-02-01 12:51:00.185026 INFO  BF_TM TM: Registered for device and port discovery
+2026-02-01 12:51:00.186563 DEBUG BF_SWITCHD bf_switchd: drivers initialized
+2026-02-01 12:51:00.186682 DEBUG BF_SWITCHD bf_switchd: initializing dru_sim service
+2026-02-01 12:51:00.186835 DEBUG BF_SWITCHD bf_switchd: library libdru_sim.so loaded
+2026-02-01 12:51:01.708282 INFO  BF_DVM bf_pktmgr_device_add dev id 0, is_sw_model 1
+2026-02-01 12:51:01.710346 DEBUG BF_LLD  Efuse settings dev 0 subdev 0
+2026-02-01 12:51:01.711015 DEBUG BF_LLD                0 : resubmit_disable
+2026-02-01 12:51:01.711072 DEBUG BF_LLD                0 : mau_tcam_reduction
+2026-02-01 12:51:01.711097 DEBUG BF_LLD                0 : mau_sram_reduction
+2026-02-01 12:51:01.711119 DEBUG BF_LLD                0 : packet_generator_disable
+2026-02-01 12:51:01.711141 DEBUG BF_LLD                0 : pipe_disable
+2026-02-01 12:51:01.711165 DEBUG BF_LLD                0 : mau_stage_disable
+2026-02-01 12:51:01.711185 DEBUG BF_LLD 0000000000000000 : port_disable (hi)
+2026-02-01 12:51:01.711205 DEBUG BF_LLD 0000000000000000 : port_disable (lo)
+2026-02-01 12:51:01.711226 DEBUG BF_LLD 0000000000000000 : tm_memory_disable
+2026-02-01 12:51:01.711247 DEBUG BF_LLD                0 : port_speed_reduction
+2026-02-01 12:51:01.711268 DEBUG BF_LLD                0 : cpu_port_speed_reduction
+2026-02-01 12:51:01.711289 DEBUG BF_LLD                0 : pcie_lane_reduction
+2026-02-01 12:51:01.711310 DEBUG BF_LLD                0 : baresync_disable
+2026-02-01 12:51:01.711331 DEBUG BF_LLD                0 : frequency_reduction
+2026-02-01 12:51:01.711352 DEBUG BF_LLD                0 : frequency_check_disable
+2026-02-01 12:51:01.711372 DEBUG BF_LLD                0 : versioning
+2026-02-01 12:51:01.711394 DEBUG BF_LLD                0 : chip_part_number
+2026-02-01 12:51:01.711415 DEBUG BF_LLD                0 : part_revision_number
+2026-02-01 12:51:01.711435 DEBUG BF_LLD                0 : package_id
+2026-02-01 12:51:01.711456 DEBUG BF_LLD 0000000000000000 : chip_id
+2026-02-01 12:51:01.711477 DEBUG BF_LLD                0 : pmro_and_skew
+2026-02-01 12:51:01.711507 DEBUG BF_LLD                0 : voltage_scaling
+2026-02-01 12:51:01.711528 DEBUG BF_LLD                0 : die-config
+2026-02-01 12:51:01.711548 DEBUG BF_LLD                0 : constant0
+2026-02-01 12:51:01.711568 DEBUG BF_LLD                0 : constant1
+2026-02-01 12:51:01.711588 DEBUG BF_LLD                0 : serdes disable even
+2026-02-01 12:51:01.711631 DEBUG BF_LLD                0 : serdes disable odd
+2026-02-01 12:51:01.711655 DEBUG BF_LLD Wafer-id: 
+2026-02-01 12:51:01.711994 DEBUG BF_LLD dev 0 subdev 0: SPI idcode: 0bad0bad (rc=0)
+2026-02-01 12:51:01.712214 DEBUG BF_LLD TCU: 0 : WARNING: device requires Power-on Reset: <0bad0bad>
+2026-02-01 12:51:01.712422 DEBUG BF_LLD TCU: 0 : Flush..
+2026-02-01 12:51:01.730025 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.730359 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.730495 DEBUG BF_LLD TCU: 0 : Flush done
+2026-02-01 12:51:01.730532 DEBUG BF_LLD TCU: 0 : Repair..
+2026-02-01 12:51:01.732984 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.733469 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.740955 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.742527 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.764653 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.765756 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.768330 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.772599 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.782055 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.785823 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.789258 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.789777 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.791701 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.795365 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.805284 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.808411 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.916020 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.919764 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.924457 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.924778 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.929405 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.929562 DEBUG BF_LLD ERROR: tcu_wrack register value is not correct on dev=0. Expected : 0x01 , Actual : 0xbad0bad
+2026-02-01 12:51:01.929910 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:51:01.930114 DEBUG BF_LLD ERROR: tcu_status register value is not correct on dev=0. Expected : 0x2a , Actual : 0xbad0bad
+2026-02-01 12:51:01.969018 DEBUG BF_LLD TCU: 0 : Repair done.
+2026-02-01 12:51:01.971807 DEBUG BF_LLD EFUSE: Set core clk to 1.22GHz, dev=0, PLL ctrl0 value=0xcd44cbfe
+2026-02-01 12:51:02.190836 DEBUG BF_LLD Core PLL has not locked even after 100 ms; PLL Lock chip 0 dbg_rst 0
+2026-02-01 12:51:02.599957 DEBUG BF_LLD [Unreset] Done after 1 polls
+2026-02-01 12:51:02.715452 DEBUG BF_LLD DR flush still asserted: dev 0 mbus bad0bad cbus bad0bad pbus bad0bad tbus 1
+2026-02-01 12:51:02.765960 INFO  BF_DVM bf_device_add dev id 0, is_sw_model 1
+2026-02-01 12:51:02.766134 DEBUG BF_PORT port_mgr_dev_add:59:0:0(warm_init_mode)
+2026-02-01 12:51:02.766149 DEBUG BF_PORT port_mgr_tof1_dev_add:78:0
+2026-02-01 12:51:02.766690 INFO  BF_PORT set chip part revision number, dev 0, part rev 0
+2026-02-01 12:51:02.766810 DEBUG BF_PORT 0:-:-: sbus master fw: 0000_0000
+2026-02-01 12:51:02.766818 DEBUG BF_PORT 0:-:-: PCIe serdes fw: 0000_0000
+2026-02-01 12:51:02.766822 DEBUG BF_PORT 0:-:-:      serdes fw: 0000_0000
+2026-02-01 12:51:02.766839 INFO  BF_PORT port_mgr_mac_block_init: core clock speed in ns = 0.819672
+2026-02-01 12:51:02.820551 ERROR BF_PIPE pipe_mgr_ctx_json_parse:6884: Could not open configuration file: /home/ubuntu/open-p4studio/install/pipe/context.json.
+
+2026-02-01 12:51:02.821548 ERROR BF_PIPE pipe_mgr_rmt_import : Error in parsing the context jSON file
+2026-02-01 12:51:02.821561 ERROR BF_PIPE pipe_mgr_add_rmt_device: failed to import rmt config
+2026-02-01 12:51:02.821586 ERROR BF_PIPE pipe_mgr_add_device: failed to instantiate device No system resources 2
+2026-02-01 12:51:02.821597 ERROR BF_DVM Device add handling failed for dev 0, sts No system resources (2), Client pipe-mgr 
+2026-02-01 12:51:02.821605 ERROR BF_DVM Device add failed for dev 0, sts No system resources (2)
+2026-02-01 12:51:02.821699 ERROR BF_TM TM: tm_remove_device called without valid tm_ctx for device 0
+2026-02-01 12:51:02.822429 ERROR BF_PIPE pipe_mgr_remove_device: failed to de-instantiate device 0, err Object not found
+2026-02-01 12:51:02.822546 DEBUG BF_PORT port_mgr_dev_remove:103:0
+2026-02-01 12:51:02.822556 DEBUG BF_PORT port_mgr_tof1_dev_remove:200:0
+2026-02-01 12:51:02.822658 ERROR BF_SWITCHD ERROR: bf_device_add failed(2) for dev_id 0
+2026-02-01 12:51:02.822962 ERROR BF_SWITCHD ERROR: bf_switchd_device_add failed(No system resources) for dev_id 0
+2026-02-01 12:51:02.823060 DEBUG BF_SWITCHD bf_switchd: initialized 0 devices
+2026-02-01 12:51:02.823131 DEBUG BF_SWITCHD bf_switchd: spawning cli server thread
+2026-02-01 12:51:02.823347 DEBUG BF_SWITCHD bf_switchd: spawning driver shell
+2026-02-01 12:51:02.823502 DEBUG BF_SWITCHD bf_switchd: server started - listening on port 9999
+2026-02-01 12:59:16.014533 DEBUG BF_SWITCHD bf_switchd: system services initialized
+2026-02-01 12:59:16.014594 DEBUG BF_SWITCHD bf_switchd: loading conf_file /home/ubuntu/P4_Code/p4src/basic.tofino/basic.conf...
+2026-02-01 12:59:16.014616 DEBUG BF_SWITCHD bf_switchd: processing device configuration...
+2026-02-01 12:59:16.014679 DEBUG BF_SWITCHD Configuration for dev_id 0
+2026-02-01 12:59:16.014687 DEBUG BF_SWITCHD   Family        : tofino
+2026-02-01 12:59:16.014691 DEBUG BF_SWITCHD   pci_sysfs_str : /sys/devices/pci0000:00/0000:00:03.0/0000:05:00.0
+2026-02-01 12:59:16.014696 DEBUG BF_SWITCHD   pci_int_mode  : 0
+2026-02-01 12:59:16.014700 DEBUG BF_SWITCHD   sds_fw_path   : share/tofino_sds_fw/avago/firmware
+2026-02-01 12:59:16.014704 DEBUG BF_SWITCHD bf_switchd: processing P4 configuration...
+2026-02-01 12:59:16.014758 DEBUG BF_SWITCHD coal_mirror_enable=0 coal_min=0 sessions_num=0
+2026-02-01 12:59:16.014795 DEBUG BF_SWITCHD P4 profile for dev_id 0
+2026-02-01 12:59:16.014803 DEBUG BF_SWITCHD num P4 programs 1
+2026-02-01 12:59:16.014808 DEBUG BF_SWITCHD   p4_name: basic
+2026-02-01 12:59:16.014813 DEBUG BF_SWITCHD   p4_pipeline_name: pipe
+2026-02-01 12:59:16.014817 DEBUG BF_SWITCHD     libpd: 
+2026-02-01 12:59:16.014821 DEBUG BF_SWITCHD     libpdthrift: 
+2026-02-01 12:59:16.014825 DEBUG BF_SWITCHD     context: /home/ubuntu/open-p4studio/install/pipe/context.json
+2026-02-01 12:59:16.014829 DEBUG BF_SWITCHD     config: /home/ubuntu/open-p4studio/install/pipe/tofino.bin
+2026-02-01 12:59:16.014833 DEBUG BF_SWITCHD   Pipes in scope [
+2026-02-01 12:59:16.014837 DEBUG BF_SWITCHD 0 
+2026-02-01 12:59:16.014846 DEBUG BF_SWITCHD 1 
+2026-02-01 12:59:16.014850 DEBUG BF_SWITCHD 2 
+2026-02-01 12:59:16.014854 DEBUG BF_SWITCHD 3 
+2026-02-01 12:59:16.014858 DEBUG BF_SWITCHD ]
+2026-02-01 12:59:16.014865 DEBUG BF_SWITCHD   diag: 
+2026-02-01 12:59:16.014869 DEBUG BF_SWITCHD   accton diag: 
+2026-02-01 12:59:16.014875 DEBUG BF_SWITCHD   Agent[0]: /home/ubuntu/open-p4studio/install/lib/libpltfm_mgr.so
+2026-02-01 12:59:16.015414 DEBUG BF_SWITCHD bf_switch: Operational mode set to default: MODEL
+2026-02-01 12:59:16.015488 DEBUG BF_DVM BF-SDE vesion: 9.13.4
+2026-02-01 12:59:16.022421 INFO  BF_PM pm_fsm_queues_init:342 pm_fsm_queues_init:342 Initializing all FSM queues
+2026-02-01 12:59:16.022541 INFO  BF_PM pm_fsm_queues_init:348 pm_fsm_queues_init:348 Initializing all FSM queues done
+2026-02-01 12:59:16.022949 INFO  BF_TM TM: Registered for device and port discovery
+2026-02-01 12:59:16.024351 DEBUG BF_SWITCHD bf_switchd: drivers initialized
+2026-02-01 12:59:16.024447 DEBUG BF_SWITCHD bf_switchd: initializing dru_sim service
+2026-02-01 12:59:16.024680 DEBUG BF_SWITCHD bf_switchd: library libdru_sim.so loaded
+2026-02-01 12:59:17.571508 INFO  BF_DVM bf_pktmgr_device_add dev id 0, is_sw_model 1
+2026-02-01 12:59:17.573927 DEBUG BF_LLD  Efuse settings dev 0 subdev 0
+2026-02-01 12:59:17.574012 DEBUG BF_LLD                0 : resubmit_disable
+2026-02-01 12:59:17.574023 DEBUG BF_LLD                0 : mau_tcam_reduction
+2026-02-01 12:59:17.574029 DEBUG BF_LLD                0 : mau_sram_reduction
+2026-02-01 12:59:17.574034 DEBUG BF_LLD                0 : packet_generator_disable
+2026-02-01 12:59:17.574039 DEBUG BF_LLD                0 : pipe_disable
+2026-02-01 12:59:17.574046 DEBUG BF_LLD                0 : mau_stage_disable
+2026-02-01 12:59:17.574049 DEBUG BF_LLD 0000000000000000 : port_disable (hi)
+2026-02-01 12:59:17.574053 DEBUG BF_LLD 0000000000000000 : port_disable (lo)
+2026-02-01 12:59:17.574058 DEBUG BF_LLD 0000000000000000 : tm_memory_disable
+2026-02-01 12:59:17.574062 DEBUG BF_LLD                0 : port_speed_reduction
+2026-02-01 12:59:17.574067 DEBUG BF_LLD                0 : cpu_port_speed_reduction
+2026-02-01 12:59:17.574072 DEBUG BF_LLD                0 : pcie_lane_reduction
+2026-02-01 12:59:17.574076 DEBUG BF_LLD                0 : baresync_disable
+2026-02-01 12:59:17.574081 DEBUG BF_LLD                0 : frequency_reduction
+2026-02-01 12:59:17.574086 DEBUG BF_LLD                0 : frequency_check_disable
+2026-02-01 12:59:17.574091 DEBUG BF_LLD                0 : versioning
+2026-02-01 12:59:17.574097 DEBUG BF_LLD                0 : chip_part_number
+2026-02-01 12:59:17.574102 DEBUG BF_LLD                0 : part_revision_number
+2026-02-01 12:59:17.574106 DEBUG BF_LLD                0 : package_id
+2026-02-01 12:59:17.574111 DEBUG BF_LLD 0000000000000000 : chip_id
+2026-02-01 12:59:17.574116 DEBUG BF_LLD                0 : pmro_and_skew
+2026-02-01 12:59:17.574120 DEBUG BF_LLD                0 : voltage_scaling
+2026-02-01 12:59:17.574125 DEBUG BF_LLD                0 : die-config
+2026-02-01 12:59:17.574129 DEBUG BF_LLD                0 : constant0
+2026-02-01 12:59:17.574133 DEBUG BF_LLD                0 : constant1
+2026-02-01 12:59:17.574137 DEBUG BF_LLD                0 : serdes disable even
+2026-02-01 12:59:17.574142 DEBUG BF_LLD                0 : serdes disable odd
+2026-02-01 12:59:17.574149 DEBUG BF_LLD Wafer-id: 
+2026-02-01 12:59:17.574444 DEBUG BF_LLD dev 0 subdev 0: SPI idcode: 0bad0bad (rc=0)
+2026-02-01 12:59:17.574694 DEBUG BF_LLD TCU: 0 : WARNING: device requires Power-on Reset: <0bad0bad>
+2026-02-01 12:59:17.574748 DEBUG BF_LLD TCU: 0 : Flush..
+2026-02-01 12:59:17.586954 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.590875 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.592511 DEBUG BF_LLD TCU: 0 : Flush done
+2026-02-01 12:59:17.592537 DEBUG BF_LLD TCU: 0 : Repair..
+2026-02-01 12:59:17.595317 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.595754 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.603182 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.603796 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.612261 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.613363 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.615996 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.616992 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.618248 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.618789 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.621035 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.621993 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.623986 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.624948 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.626926 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.627289 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.728296 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.728751 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.730998 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.731353 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.733246 DEBUG BF_LLD tcu_wrack register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.733330 DEBUG BF_LLD ERROR: tcu_wrack register value is not correct on dev=0. Expected : 0x01 , Actual : 0xbad0bad
+2026-02-01 12:59:17.733484 DEBUG BF_LLD tcu_status register value on dev=0. Val : 0xbad0bad
+2026-02-01 12:59:17.733517 DEBUG BF_LLD ERROR: tcu_status register value is not correct on dev=0. Expected : 0x2a , Actual : 0xbad0bad
+2026-02-01 12:59:17.763315 DEBUG BF_LLD TCU: 0 : Repair done.
+2026-02-01 12:59:17.781690 DEBUG BF_LLD EFUSE: Set core clk to 1.22GHz, dev=0, PLL ctrl0 value=0xcd44cbfe
+2026-02-01 12:59:17.975687 DEBUG BF_LLD Core PLL has not locked even after 100 ms; PLL Lock chip 0 dbg_rst 0
+2026-02-01 12:59:18.391892 DEBUG BF_LLD [Unreset] Done after 1 polls
+2026-02-01 12:59:18.437385 DEBUG BF_LLD DR flush still asserted: dev 0 mbus bad0bad cbus bad0bad pbus bad0bad tbus 1
+2026-02-01 12:59:18.465017 INFO  BF_DVM bf_device_add dev id 0, is_sw_model 1
+2026-02-01 12:59:18.465119 DEBUG BF_PORT port_mgr_dev_add:59:0:0(warm_init_mode)
+2026-02-01 12:59:18.465226 DEBUG BF_PORT port_mgr_tof1_dev_add:78:0
+2026-02-01 12:59:18.466229 INFO  BF_PORT set chip part revision number, dev 0, part rev 0
+2026-02-01 12:59:18.466312 DEBUG BF_PORT 0:-:-: sbus master fw: 0000_0000
+2026-02-01 12:59:18.466319 DEBUG BF_PORT 0:-:-: PCIe serdes fw: 0000_0000
+2026-02-01 12:59:18.466323 DEBUG BF_PORT 0:-:-:      serdes fw: 0000_0000
+2026-02-01 12:59:18.466340 INFO  BF_PORT port_mgr_mac_block_init: core clock speed in ns = 0.819672
+2026-02-01 12:59:18.531659 ERROR BF_PIPE pipe_mgr_ctx_json_parse:6884: Could not open configuration file: /home/ubuntu/open-p4studio/install/pipe/context.json.
+
+2026-02-01 12:59:18.531887 ERROR BF_PIPE pipe_mgr_rmt_import : Error in parsing the context jSON file
+2026-02-01 12:59:18.531910 ERROR BF_PIPE pipe_mgr_add_rmt_device: failed to import rmt config
+2026-02-01 12:59:18.531943 ERROR BF_PIPE pipe_mgr_add_device: failed to instantiate device No system resources 2
+2026-02-01 12:59:18.531958 ERROR BF_DVM Device add handling failed for dev 0, sts No system resources (2), Client pipe-mgr 
+2026-02-01 12:59:18.531971 ERROR BF_DVM Device add failed for dev 0, sts No system resources (2)
+2026-02-01 12:59:18.532092 ERROR BF_TM TM: tm_remove_device called without valid tm_ctx for device 0
+2026-02-01 12:59:18.537861 ERROR BF_PIPE pipe_mgr_remove_device: failed to de-instantiate device 0, err Object not found
+2026-02-01 12:59:18.538078 DEBUG BF_PORT port_mgr_dev_remove:103:0
+2026-02-01 12:59:18.538122 DEBUG BF_PORT port_mgr_tof1_dev_remove:200:0
+2026-02-01 12:59:18.539020 ERROR BF_SWITCHD ERROR: bf_device_add failed(2) for dev_id 0
+2026-02-01 12:59:18.539328 ERROR BF_SWITCHD ERROR: bf_switchd_device_add failed(No system resources) for dev_id 0
+2026-02-01 12:59:18.539413 DEBUG BF_SWITCHD bf_switchd: initialized 0 devices
+2026-02-01 12:59:18.539453 DEBUG BF_SWITCHD bf_switchd: spawning cli server thread
+2026-02-01 12:59:18.539582 DEBUG BF_SWITCHD bf_switchd: spawning driver shell
+2026-02-01 12:59:18.539682 DEBUG BF_SWITCHD bf_switchd: server started - listening on port 9999
