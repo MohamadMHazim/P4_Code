@@ -18,6 +18,9 @@ run read_registers: /home/ubuntu/open-p4studio/run_bfshell.sh \
 
 -send tcp packets: sudo hping3 -S -p 80 -i u1000 -I veth0 10.0.0.2
 
+bfrt.basic.pipe.Ingress -> tcp_pkts.get(0)
+/home/ubuntu/open-p4studio/install/bin/bfshell -p 9999
+
 
 VIRTUAL MACHINE:
 1️⃣ Create veths

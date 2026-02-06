@@ -87,27 +87,43 @@ control Ingress(
     /******************  Tables (move conditions out of actions)  **************/
 
     // Compute packet length based on IPv4 validity (no if inside actions)
-    action set_pkt_len_ipv4() { meta.pkt_len = (bit<16>)(hdr.ipv4.total_len + 16w14); }
-    action set_pkt_len_zero() { meta.pkt_len = 16w0; }
+action set_pkt_len_ipv4() { meta.pkt_len = (bit<16>)(hdr.ipv4.total_len + 16w14); }
+action set_pkt_len_zero() { meta.pkt_len = 16w0; }
 
-    table compute_pkt_len {
-        key = { hdr.ipv4.isValid() : exact; }
-        actions = { set_pkt_len_ipv4; set_pkt_len_zero; }
-        const default_action = set_pkt_len_zero();
-        size = 2;
-    }
+table compute_pkt_len {
+    key = { hdr.ipv4.isValid() : exact; }
+    actions = { set_pkt_len_ipv4; set_pkt_len_zero; }
+    const default_action = set_pkt_len_zero();
+    size = 2;
 
-    // Classify TCP vs non-TCP and compute hash/flags (NO register ops here)
-    table tcp_classify {
-        key = {
-            hdr.ipv4.isValid() : exact;
-            hdr.ipv4.protocol  : exact;
-            hdr.tcp.isValid()  : exact;
-        }
-        actions = { mark_tcp_and_hash; mark_non_tcp; }
-        const default_action = mark_non_tcp();
-        size = 4;
+    const entries = {
+        (true)  : set_pkt_len_ipv4();
+        (false) : set_pkt_len_zero();
     }
+}
+
+// Classify TCP vs non-TCP and compute hash/flags
+table tcp_classify {
+    key = {
+        hdr.ipv4.isValid() : exact;
+        hdr.ipv4.protocol  : exact;
+        hdr.tcp.isValid()  : exact;
+    }
+    actions = { mark_tcp_and_hash; mark_non_tcp; }
+    const default_action = mark_non_tcp();
+    size = 4;
+
+    const entries = {
+        // IPv4 + TCP + tcp header valid => compute hash + set meta.is_tcp=1
+        (true,  8w6,  true)  : mark_tcp_and_hash();
+
+        // Anything else => non-tcp
+        (true,  8w6,  false) : mark_non_tcp();
+        (true,  8w0,  true)  : mark_non_tcp();
+        (false, 8w0,  false) : mark_non_tcp();
+    }
+}
+
 
     // Update base per-flow TCP counters (each table touches ONE register)
     table flow_pkts_update {

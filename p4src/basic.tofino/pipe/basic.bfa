@@ -1,5 +1,9 @@
 version:
+<<<<<<< HEAD
   run_id: "92faedbbb9e643f0"
+=======
+  run_id: "d3f78321a2a14e1e"
+>>>>>>> 22cfa6d (new changes)
   target: Tofino
 error_mode: propagate_and_disable
 phv ingress:
@@ -415,6 +419,56 @@ stage 0 ingress:
     match_group_map: [ [ 0, 1, 2, 3, 4 ] ]
     hit: [  classify_https_0 ]
     miss:  classify_https_0
+<<<<<<< HEAD
+=======
+    context_json:
+      static_entries:
+      - priority: 0
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        - field_name: hdr.ipv4.protocol
+          value: "0x6"
+        - field_name: hdr.tcp.$valid
+          value: "0x1"
+        action_handle: 0x20000003
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 1
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        - field_name: hdr.ipv4.protocol
+          value: "0x6"
+        - field_name: hdr.tcp.$valid
+          value: "0x0"
+        action_handle: 0x20000004
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 2
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        - field_name: hdr.ipv4.protocol
+          value: "0x0"
+        - field_name: hdr.tcp.$valid
+          value: "0x1"
+        action_handle: 0x20000004
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 3
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x0"
+        - field_name: hdr.ipv4.protocol
+          value: "0x0"
+        - field_name: hdr.tcp.$valid
+          value: "0x0"
+        action_handle: 0x20000004
+        is_default_entry: false
+        action_parameters_values: []
+
+>>>>>>> 22cfa6d (new changes)
     action_bus: { 32..33 : hash_dist(0, lo) }
     instruction: tcp_classify_0(action, $DEFAULT)
     actions:
@@ -521,6 +575,26 @@ stage 0 ingress:
     match_group_map: [ [ 0, 1, 2 ] ]
     hit: [  forwarding_0 ]
     miss:  forwarding_0
+<<<<<<< HEAD
+=======
+    context_json:
+      static_entries:
+      - priority: 0
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        action_handle: 0x20000001
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 1
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x0"
+        action_handle: 0x20000002
+        is_default_entry: false
+        action_parameters_values: []
+
+>>>>>>> 22cfa6d (new changes)
     action_bus: { 36..37 : immediate(0..15) }
     instruction: compute_pkt_len_0(action, $DEFAULT)
     actions:

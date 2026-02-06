@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "build_date": "Mon Feb  2 13:03:13 2026",
+=======
+  "build_date": "Fri Feb  6 14:52:16 2026",
+>>>>>>> 22cfa6d (new changes)
   "schema_version": "1.12.4",
   "compiler_version": "9.13.4 (17ade03c1)",
   "target": "tofino",
@@ -14281,7 +14285,56 @@
         }
       ],
       "ap_bind_indirect_res_to_match": [],
+<<<<<<< HEAD
       "static_entries": [],
+=======
+      "static_entries": [
+        {
+          "priority": 0,
+          "match_key_fields_values": [
+            { "field_name": "hdr.ipv4.$valid", "value": "0x1" },
+            { "field_name": "hdr.ipv4.protocol", "value": "0x6" },
+            { "field_name": "hdr.tcp.$valid", "value": "0x1" }
+          ],
+          "action_handle": 536870915,
+          "is_default_entry": false,
+          "action_parameters_values": []
+        },
+        {
+          "priority": 1,
+          "match_key_fields_values": [
+            { "field_name": "hdr.ipv4.$valid", "value": "0x1" },
+            { "field_name": "hdr.ipv4.protocol", "value": "0x6" },
+            { "field_name": "hdr.tcp.$valid", "value": "0x0" }
+          ],
+          "action_handle": 536870916,
+          "is_default_entry": false,
+          "action_parameters_values": []
+        },
+        {
+          "priority": 2,
+          "match_key_fields_values": [
+            { "field_name": "hdr.ipv4.$valid", "value": "0x1" },
+            { "field_name": "hdr.ipv4.protocol", "value": "0x0" },
+            { "field_name": "hdr.tcp.$valid", "value": "0x1" }
+          ],
+          "action_handle": 536870916,
+          "is_default_entry": false,
+          "action_parameters_values": []
+        },
+        {
+          "priority": 3,
+          "match_key_fields_values": [
+            { "field_name": "hdr.ipv4.$valid", "value": "0x0" },
+            { "field_name": "hdr.ipv4.protocol", "value": "0x0" },
+            { "field_name": "hdr.tcp.$valid", "value": "0x0" }
+          ],
+          "action_handle": 536870916,
+          "is_default_entry": false,
+          "action_parameters_values": []
+        }
+      ],
+>>>>>>> 22cfa6d (new changes)
       "match_attributes": {
         "stage_tables": [
           {
@@ -16068,7 +16121,22 @@
         }
       ],
       "ap_bind_indirect_res_to_match": [],
-      "static_entries": [],
+      "static_entries": [
+        {
+          "priority": 0,
+          "match_key_fields_values": [ { "field_name": "hdr.ipv4.$valid", "value": "0x1" } ],
+          "action_handle": 536870913,
+          "is_default_entry": false,
+          "action_parameters_values": []
+        },
+        {
+          "priority": 1,
+          "match_key_fields_values": [ { "field_name": "hdr.ipv4.$valid", "value": "0x0" } ],
+          "action_handle": 536870914,
+          "is_default_entry": false,
+          "action_parameters_values": []
+        }
+      ],
       "match_attributes": {
         "stage_tables": [
           {
@@ -19474,7 +19542,11 @@
       "hash_bit_width": 16
     }
   ],
+<<<<<<< HEAD
   "run_id": "92faedbbb9e643f0",
+=======
+  "run_id": "d3f78321a2a14e1e",
+>>>>>>> 22cfa6d (new changes)
   "driver_options": {
     "hash_parity_enabled": false,
     "high_availability_enabled": true,

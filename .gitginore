@@ -1,0 +1,1 @@
+printf "\n# generated outputs\nbfrt_python/out/\n" >> .gitignore
