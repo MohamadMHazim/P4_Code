@@ -1,0 +1,13 @@
+:02-01 12:53:26.111553:    Setting logging fn
+:02-01 12:53:26.111583:    Registering handler for tx
+:02-01 12:53:26.111694:     Updating model log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000000f
+:02-01 12:53:26.111648:    :-:-:<0,-,0>:Waiting for packets to process
+:02-01 12:53:26.121714:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 0 but P4 names have not been loaded.
+:02-01 12:53:26.122109:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 1 but P4 names have not been loaded.
+:02-01 12:53:26.122190:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 2 but P4 names have not been loaded.
+:02-01 12:53:26.122313:    :-:-:<0,0,0>:WARNING: updating P4 logging flags for pipe 3 but P4 names have not been loaded.
+:02-01 12:53:26.122348:    :-:-:<0,0,0>:Updating p4 log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000007f
+:02-01 12:53:26.137375:    :-:-:<0,0,0>:Updating tofino log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000007f
+:02-01 12:53:26.152970:    :-:-:<0,0,0>:Updating packet log flags: clearing 0xffffffff ffffffff, setting 0x00000000 0000007f
+:02-01 12:56:24.271665:    :-:-:<0,-,0>:Begin packet processing
+:02-01 12:56:24.272233:    :-:-:<0,-,0>:Chip=0 Thread=0 Pipe=*: PktsIn=0 PktsOut=0 PktsTOT=0  Waits=18

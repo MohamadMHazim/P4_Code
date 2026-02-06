@@ -41,7 +41,7 @@
       ],
       "data" : [],
       "supported_operations" : [],
-      "attributes" : ["EntryScope"]
+      "attributes" : ["EntryScope", "ConstTable"]
     },
     {
       "name" : "pipe.Ingress.tcp_classify",
@@ -107,7 +107,91 @@
       ],
       "data" : [],
       "supported_operations" : [],
-      "attributes" : ["EntryScope"]
+      "attributes" : ["EntryScope", "ConstTable"]
+    },
+    {
+      "name" : "pipe.Ingress.flow_pkts_update",
+      "id" : 46748148,
+      "table_type" : "MatchAction_Direct",
+      "size" : 2,
+      "annotations" : [],
+      "depends_on" : [],
+      "has_const_default_action" : true,
+      "key" : [
+        {
+          "id" : 1,
+          "name" : "meta.is_tcp",
+          "repeated" : false,
+          "annotations" : [],
+          "mandatory" : false,
+          "match_type" : "Exact",
+          "type" : {
+            "type" : "bytes",
+            "width" : 1
+          }
+        }
+      ],
+      "action_specs" : [
+        {
+          "id" : 18014799,
+          "name" : "Ingress.do_flow_pkts",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        },
+        {
+          "id" : 22763383,
+          "name" : "Ingress.nop",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        }
+      ],
+      "data" : [],
+      "supported_operations" : [],
+      "attributes" : ["EntryScope", "ConstTable"]
+    },
+    {
+      "name" : "pipe.Ingress.flow_bytes_update",
+      "id" : 46055397,
+      "table_type" : "MatchAction_Direct",
+      "size" : 2,
+      "annotations" : [],
+      "depends_on" : [],
+      "has_const_default_action" : true,
+      "key" : [
+        {
+          "id" : 1,
+          "name" : "meta.is_tcp",
+          "repeated" : false,
+          "annotations" : [],
+          "mandatory" : false,
+          "match_type" : "Exact",
+          "type" : {
+            "type" : "bytes",
+            "width" : 1
+          }
+        }
+      ],
+      "action_specs" : [
+        {
+          "id" : 26541073,
+          "name" : "Ingress.do_flow_bytes",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        },
+        {
+          "id" : 22763383,
+          "name" : "Ingress.nop",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        }
+      ],
+      "data" : [],
+      "supported_operations" : [],
+      "attributes" : ["EntryScope", "ConstTable"]
     },
     {
       "name" : "pipe.Ingress.classify_https",
@@ -168,8 +252,8 @@
       ],
       "action_specs" : [
         {
-          "id" : 33407311,
-          "name" : "Ingress.set_https_and_count",
+          "id" : 24127150,
+          "name" : "Ingress.set_https_flag",
           "action_scope" : "TableAndDefault",
           "annotations" : [],
           "data" : []
@@ -177,6 +261,90 @@
         {
           "id" : 29034377,
           "name" : "Ingress.clear_https_flag",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        }
+      ],
+      "data" : [],
+      "supported_operations" : [],
+      "attributes" : ["EntryScope", "ConstTable"]
+    },
+    {
+      "name" : "pipe.Ingress.https_pkts_update",
+      "id" : 43581682,
+      "table_type" : "MatchAction_Direct",
+      "size" : 2,
+      "annotations" : [],
+      "depends_on" : [],
+      "has_const_default_action" : true,
+      "key" : [
+        {
+          "id" : 1,
+          "name" : "meta.is_https",
+          "repeated" : false,
+          "annotations" : [],
+          "mandatory" : false,
+          "match_type" : "Exact",
+          "type" : {
+            "type" : "bytes",
+            "width" : 1
+          }
+        }
+      ],
+      "action_specs" : [
+        {
+          "id" : 29265288,
+          "name" : "Ingress.do_https_pkts",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        },
+        {
+          "id" : 22763383,
+          "name" : "Ingress.nop",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        }
+      ],
+      "data" : [],
+      "supported_operations" : [],
+      "attributes" : ["EntryScope", "ConstTable"]
+    },
+    {
+      "name" : "pipe.Ingress.https_bytes_update",
+      "id" : 40089980,
+      "table_type" : "MatchAction_Direct",
+      "size" : 2,
+      "annotations" : [],
+      "depends_on" : [],
+      "has_const_default_action" : true,
+      "key" : [
+        {
+          "id" : 1,
+          "name" : "meta.is_https",
+          "repeated" : false,
+          "annotations" : [],
+          "mandatory" : false,
+          "match_type" : "Exact",
+          "type" : {
+            "type" : "bytes",
+            "width" : 1
+          }
+        }
+      ],
+      "action_specs" : [
+        {
+          "id" : 18078172,
+          "name" : "Ingress.do_https_bytes",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        },
+        {
+          "id" : 22763383,
+          "name" : "Ingress.nop",
           "action_scope" : "TableAndDefault",
           "annotations" : [],
           "data" : []
@@ -250,6 +418,78 @@
       ],
       "data" : [],
       "supported_operations" : [],
+      "attributes" : ["EntryScope"]
+    },
+    {
+      "name" : "pipe.Egress.packet_size_hist",
+      "id" : 37344760,
+      "table_type" : "MatchAction_Direct",
+      "size" : 512,
+      "annotations" : [],
+      "depends_on" : [],
+      "has_const_default_action" : true,
+      "key" : [
+        {
+          "id" : 1,
+          "name" : "eg_intr_md.pkt_length",
+          "repeated" : false,
+          "annotations" : [],
+          "mandatory" : false,
+          "match_type" : "Range",
+          "type" : {
+            "type" : "bytes",
+            "width" : 16
+          }
+        },
+        {
+          "id" : 65537,
+          "name" : "$MATCH_PRIORITY",
+          "repeated" : false,
+          "annotations" : [],
+          "mandatory" : false,
+          "match_type" : "Exact",
+          "type" : {
+            "type" : "uint32"
+          }
+        }
+      ],
+      "action_specs" : [
+        {
+          "id" : 20670220,
+          "name" : "Egress.just_count",
+          "action_scope" : "TableAndDefault",
+          "annotations" : [],
+          "data" : []
+        },
+        {
+          "id" : 21257015,
+          "name" : "NoAction",
+          "action_scope" : "DefaultOnly",
+          "annotations" : [
+            {
+              "name" : "@defaultonly"
+            }
+          ],
+          "data" : []
+        }
+      ],
+      "data" : [
+        {
+          "mandatory" : false,
+          "read_only" : false,
+          "singleton" : {
+            "id" : 65554,
+            "name" : "$COUNTER_SPEC_PKTS",
+            "repeated" : false,
+            "annotations" : [],
+            "type" : {
+              "type" : "uint64",
+              "default_value" : 0
+            }
+          }
+        }
+      ],
+      "supported_operations" : ["SyncCounters"],
       "attributes" : ["EntryScope"]
     },
     {

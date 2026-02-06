@@ -53,17 +53,21 @@ control Ingress(
         ig_tm_md.bypass_egress     = 1w1;
     }
 
+    /***************************  Utility actions  ****************************/
+    action nop() { }
+
     /*******************  Actions (no conditionals inside)  ********************/
     action mark_non_tcp() {
         meta.is_tcp   = 0;
         meta.is_https = 0;
+        meta.flow_idx = 0;
         // pkt_len is computed by compute_pkt_len table
     }
 
-    // Computes hash and base counters; no pkt_len branching here.
+    // Computes hash + sets flags ONLY (no register ops here)
     action mark_tcp_and_hash() {
         meta.is_tcp   = 1;
-        meta.is_https = 0;  // may be set to 1 by classify_https table
+        meta.is_https = 0;  // may be set later by classify_https
 
         bit<16> hval = crc16_hasher.get({
             hdr.ipv4.src_addr, hdr.ipv4.dst_addr,
@@ -71,61 +75,119 @@ control Ingress(
             hdr.ipv4.protocol
         });
         meta.flow_idx = hval;
-
-        // Base per-flow stats (always)
-        flow_pkts_add.execute(meta.flow_idx);
-        flow_bytes_add.execute(meta.flow_idx);
     }
 
-    // HTTPS counters live in their own action (no conditionals)
-    action set_https_and_count() {
-        meta.is_https = 1;
-        https_flow_pkts_add.execute(meta.flow_idx);
-        https_flow_bytes_add.execute(meta.flow_idx);
-    }
-    action clear_https_flag() {
-        meta.is_https = 0;
-    }
+    /*****************  Counter update actions (ONE register each)  ************/
+    action do_flow_pkts()  { flow_pkts_add.execute(meta.flow_idx); }
+    action do_flow_bytes() { flow_bytes_add.execute(meta.flow_idx); }
+
+    action do_https_pkts()  { https_flow_pkts_add.execute(meta.flow_idx); }
+    action do_https_bytes() { https_flow_bytes_add.execute(meta.flow_idx); }
 
     /******************  Tables (move conditions out of actions)  **************/
 
     // Compute packet length based on IPv4 validity (no if inside actions)
-    action set_pkt_len_ipv4() { meta.pkt_len = (bit<16>)(hdr.ipv4.total_len + 16w14); }
-    action set_pkt_len_zero() { meta.pkt_len = 16w0; }
+action set_pkt_len_ipv4() { meta.pkt_len = (bit<16>)(hdr.ipv4.total_len + 16w14); }
+action set_pkt_len_zero() { meta.pkt_len = 16w0; }
 
-    table compute_pkt_len {
-        key = { hdr.ipv4.isValid() : exact; }
-        actions = { set_pkt_len_ipv4; set_pkt_len_zero; }
-        const default_action = set_pkt_len_zero();
+table compute_pkt_len {
+    key = { hdr.ipv4.isValid() : exact; }
+    actions = { set_pkt_len_ipv4; set_pkt_len_zero; }
+    const default_action = set_pkt_len_zero();
+    size = 2;
+
+    const entries = {
+        (true)  : set_pkt_len_ipv4();
+        (false) : set_pkt_len_zero();
+    }
+}
+
+// Classify TCP vs non-TCP and compute hash/flags
+table tcp_classify {
+    key = {
+        hdr.ipv4.isValid() : exact;
+        hdr.ipv4.protocol  : exact;
+        hdr.tcp.isValid()  : exact;
+    }
+    actions = { mark_tcp_and_hash; mark_non_tcp; }
+    const default_action = mark_non_tcp();
+    size = 4;
+
+    const entries = {
+        // IPv4 + TCP + tcp header valid => compute hash + set meta.is_tcp=1
+        (true,  8w6,  true)  : mark_tcp_and_hash();
+
+        // Anything else => non-tcp
+        (true,  8w6,  false) : mark_non_tcp();
+        (true,  8w0,  true)  : mark_non_tcp();
+        (false, 8w0,  false) : mark_non_tcp();
+    }
+}
+
+
+    // Update base per-flow TCP counters (each table touches ONE register)
+    table flow_pkts_update {
+        key = { meta.is_tcp : exact; }
+        actions = { do_flow_pkts; nop; }
+        const default_action = nop();
         size = 2;
-    }
 
-    // Classify TCP vs non-TCP, and trigger base counters
-    table tcp_classify {
-        key = {
-            hdr.ipv4.isValid() : exact;
-            hdr.ipv4.protocol  : exact;
-            hdr.tcp.isValid()  : exact;
+        const entries = {
+            (1w1) : do_flow_pkts();
         }
-        actions = { mark_tcp_and_hash; mark_non_tcp; }
-        const default_action = mark_non_tcp();
-        size = 4;
     }
 
-    // Decide HTTPS via ports (443 on either side) and update HTTPS counters
+    table flow_bytes_update {
+        key = { meta.is_tcp : exact; }
+        actions = { do_flow_bytes; nop; }
+        const default_action = nop();
+        size = 2;
+
+        const entries = {
+            (1w1) : do_flow_bytes();
+        }
+    }
+
+    // Decide HTTPS via ports (443 on either side) - ONLY sets flag here
+    action set_https_flag()   { meta.is_https = 1; }
+    action clear_https_flag() { meta.is_https = 0; }
+
     table classify_https {
         key = {
             hdr.tcp.isValid() : exact;
             hdr.tcp.sport     : ternary;
             hdr.tcp.dport     : ternary;
         }
-        actions = { set_https_and_count; clear_https_flag; }
+        actions = { set_https_flag; clear_https_flag; }
         const default_action = clear_https_flag();
         size = 3;
 
         const entries = {
-            (true, 16w443 &&& 16w0xFFFF, 16w0   &&& 16w0)       : set_https_and_count();
-            (true, 16w0   &&& 16w0,      16w443 &&& 16w0xFFFF)  : set_https_and_count();
+            (true, 16w443 &&& 16w0xFFFF, 16w0   &&& 16w0)       : set_https_flag();
+            (true, 16w0   &&& 16w0,      16w443 &&& 16w0xFFFF)  : set_https_flag();
+        }
+    }
+
+    // Update HTTPS counters (each table touches ONE register)
+    table https_pkts_update {
+        key = { meta.is_https : exact; }
+        actions = { do_https_pkts; nop; }
+        const default_action = nop();
+        size = 2;
+
+        const entries = {
+            (1w1) : do_https_pkts();
+        }
+    }
+
+    table https_bytes_update {
+        key = { meta.is_https : exact; }
+        actions = { do_https_bytes; nop; }
+        const default_action = nop();
+        size = 2;
+
+        const entries = {
+            (1w1) : do_https_bytes();
         }
     }
 
@@ -139,8 +201,19 @@ control Ingress(
     /*********************************  Apply  *********************************/
     apply {
         compute_pkt_len.apply();
+
         tcp_classify.apply();
+
+        // base TCP counters (1 register per table)
+        flow_pkts_update.apply();
+        flow_bytes_update.apply();
+
         classify_https.apply();
+
+        // HTTPS counters (1 register per table)
+        https_pkts_update.apply();
+        https_bytes_update.apply();
+
         forwarding.apply();
     }
 }

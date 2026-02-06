@@ -1,9 +1,9 @@
 version:
-  run_id: "538349214d6e490f"
+  run_id: "d3f78321a2a14e1e"
   target: Tofino
 error_mode: propagate_and_disable
 phv ingress:
-  ig_intr_md.ingress_port: {  stage 0: H3(0..8) } 
+  ig_intr_md.ingress_port: {  stage 0..1: H3(0..8) } 
   hdr.ethernet.dst_addr.0-15: TH2
   hdr.ethernet.dst_addr.16-31: TH3
   hdr.ethernet.dst_addr.32-47: TH14
@@ -37,12 +37,13 @@ phv ingress:
   hdr.udp.dport: TW2(0..15)
   hdr.udp.len: TW0(16..31)
   hdr.udp.chksum: TW0(0..15)
-  meta.flow_idx: {  stage 2: W3(0..15) } 
+  meta.is_tcp: {  stage 1..2: B1(4) } 
+  meta.is_https: {  stage 1: B3(4) } 
+  meta.flow_idx: {  stage 1..2: H4 } 
   meta.pkt_len: {  stage 1..2: H1 } 
-  hval_0: {  stage 1: W3(16..31) } 
-  ig_intr_md_for_tm.ucast_egress_port: {  stage 1..12: H2(0..8) } 
-  ig_intr_md_for_tm.bypass_egress: {  stage 1..12: B1(3) } 
-  ig_intr_md_for_dprsr.drop_ctl: {  stage 1..12: B1(0..2) } 
+  ig_intr_md_for_tm.ucast_egress_port: {  stage 2..12: H2(0..8) } 
+  ig_intr_md_for_tm.bypass_egress: {  stage 2..12: B1(3) } 
+  ig_intr_md_for_dprsr.drop_ctl: {  stage 2..12: B1(0..2) } 
   ig_intr_md_for_dprsr.mirror_type: {  stage 12: B0(0..2) } 
   $tmp2: {  stage 12: H3(0..9) } 
   hdr.ethernet.$valid: B3(0)
@@ -51,6 +52,7 @@ phv ingress:
   hdr.udp.$valid: B3(3)
 phv egress:
   eg_intr_md.egress_port: H16(0..8)
+  eg_intr_md.pkt_length: {  stage 0: H17 } 
   hdr.min_parse_depth_padding_0$0.packet_payload.0-31: TW4
   hdr.min_parse_depth_padding_0$0.packet_payload.32-63: TW5
   hdr.min_parse_depth_padding_0$0.packet_payload.64-79: TH18
@@ -77,7 +79,7 @@ phv egress:
   hdr.min_parse_depth_padding_0$3.$valid: B16(0)
 parser ingress:
   start: $entry_point.start
-  init_zero: [ W3, H1, B1, B0, B3 ]
+  init_zero: [ B1, B3, H4, H1, B0 ]
   bitwise_or: [ B3 ]
   hdr_len_adj: 16
   states:
@@ -260,7 +262,8 @@ parser egress:
         counter:
           imm: 38
         0..1: H16  # bit[7..15] -> H16 bit[8..0]: egress::eg_intr_md.egress_port
-        intr_md: 9
+        25..26: H17  # egress::eg_intr_md.pkt_length
+        intr_md: 25
         shift: 27
         buf_req: 27
         next: $entry_point.start.min_parse_depth_accept_initial.$ctr_stall0
@@ -374,51 +377,12 @@ stage 0 ingress:
       set_port_metadata:
       - handle: 0x20000000
       - p4_param_order: { ig_intr_md: 64 } 
-  exact_match compute_pkt_len_0 0:
-    p4: { name: Ingress.compute_pkt_len, size: 2 }
+  exact_match tcp_classify_0 0:
+    p4: { name: Ingress.tcp_classify, size: 4 }
     p4_param_order: 
       hdr.ipv4.$valid: { type: exact, size: 1, full_size: 1 }
-    row: 7
-    bus: 0
-    column: 2
-    stash: 
-      row: [ 7 ]
-      col: [ 2 ]
-      unit: [ 0 ]
-    ways:
-      - { group: 0, index: 0..9, select: 40..51 & 0x0, rams: [[7, 2]] }
-    input_xbar:
-      exact group 0: { 1: hdr.ipv4.$valid }
-      hash 0:
-        0: hdr.ipv4.$valid
-      hash group 0:
-        table: [0]
-        seed: 0x0
-    format: { action(0): 0..0, immediate(0): 3..18, version(0): 112..115, action(1): 1..1, immediate(1): 19..34, version(1): 116..119, action(2): 2..2, immediate(2): 35..50, version(2): 120..123 }
-    match_group_map: [ [ 0, 1, 2 ] ]
-    hit: [  forwarding_0 ]
-    miss:  forwarding_0
-    action_bus: { 32..33 : immediate(0..15) }
-    instruction: compute_pkt_len_0(action, $DEFAULT)
-    actions:
-      Ingress.set_pkt_len_ipv4(0, 1):
-      - hit_allowed: { allowed: true }
-      - default_action: { allowed: false, reason: none }
-      - handle: 0x20000001
-      - next_table: 0
-      - { $constant0: immediate(0..15), $constant0: 14 }
-      - add H1, $constant0, H0
-      Ingress.set_pkt_len_zero(1, 0):
-      - hit_allowed: { allowed: true }
-      - default_action: { allowed: true, is_constant: true }
-      - handle: 0x20000002
-      - next_table: 0
-      - {  }
-    default_action: Ingress.set_pkt_len_zero
-  exact_match forwarding_0 1:
-    p4: { name: Ingress.forwarding, size: 256 }
-    p4_param_order: 
-      ig_intr_md.ingress_port: { type: exact, size: 9, full_size: 9 }
+      hdr.ipv4.protocol: { type: exact, size: 8, full_size: 8 }
+      hdr.tcp.$valid: { type: exact, size: 1, full_size: 1 }
     row: 7
     bus: 1
     column: 3
@@ -427,65 +391,9 @@ stage 0 ingress:
       col: [ 3 ]
       unit: [ 1 ]
     ways:
-      - { group: 0, index: 10..19, select: 40..51 & 0x0, rams: [[7, 3]] }
-    input_xbar:
-      exact group 0: { 8: ig_intr_md.ingress_port(8), 16: ig_intr_md.ingress_port(0..7) }
-      hash 0:
-        10: ig_intr_md.ingress_port(8)
-        11..18: ig_intr_md.ingress_port(0..7)
-      hash group 0:
-        table: [0]
-        seed: 0x0
-    format: { action(0): 0..0, immediate(0): 5..13, version(0): 112..115, action(1): 1..1, immediate(1): 14..22, version(1): 116..119, action(2): 2..2, immediate(2): 23..31, version(2): 120..123, action(3): 3..3, immediate(3): 32..40, version(3): 124..127, action(4): 4..4, immediate(4): 41..49, version(4): 56..59 }
-    match_group_map: [ [ 0, 1, 2, 3, 4 ] ]
-    hit: [  tcp_classify_0 ]
-    miss:  tcp_classify_0
-    action_bus: { 36..37 : immediate(0..8) }
-    instruction: forwarding_0(action, $DEFAULT)
-    actions:
-      Ingress.send_using_port(0, 2):
-      - p4_param_order: { port: 9 }
-      - hit_allowed: { allowed: true }
-      - default_action: { allowed: true }
-      - handle: 0x20000007
-      - next_table: 0
-      - { port: immediate(0..8) }
-      - set ig_intr_md_for_tm.ucast_egress_port, port
-      - set ig_intr_md_for_tm.bypass_egress, 0
-      Ingress.drop(1, 4):
-      - hit_allowed: { allowed: true }
-      - default_action: { allowed: true }
-      - handle: 0x20000008
-      - next_table: 0
-      - {  }
-      - set ig_intr_md_for_tm.ucast_egress_port, 0
-      - set B1(0..3), 249
-      NoAction(-1, 0):
-      - hit_allowed: { allowed: false, reason: user_indicated_default_only }
-      - default_only_action: { allowed: true }
-      - handle: 0x20000009
-      - next_table: 0
-      - {  }
-    default_only_action: NoAction
-stage 1 ingress:
-  dependency: match
-  exact_match tcp_classify_0 0:
-    p4: { name: Ingress.tcp_classify, size: 4 }
-    p4_param_order: 
-      hdr.ipv4.$valid: { type: exact, size: 1, full_size: 1 }
-      hdr.ipv4.protocol: { type: exact, size: 8, full_size: 8 }
-      hdr.tcp.$valid: { type: exact, size: 1, full_size: 1 }
-    row: 7
-    bus: 0
-    column: 2
-    stash: 
-      row: [ 7 ]
-      col: [ 2 ]
-      unit: [ 0 ]
-    ways:
-      - { group: 0, index: 0..9, select: 40..51 & 0x0, rams: [[7, 2]] }
+      - { group: 0, index: 0..9, select: 40..51 & 0x0, rams: [[7, 3]] }
     hash_dist:
-      0: { hash: 1, mask: 0xffff, shift: 5 }
+      0: { hash: 1, mask: 0xffff, shift: 0 }
     input_xbar:
       exact group 0: { 0: hdr.ipv4.protocol, 9: hdr.ipv4.$valid, 10: hdr.tcp.$valid }
       hash 0:
@@ -503,12 +411,58 @@ stage 1 ingress:
       hash group 1:
         table: [2, 3]
         seed: 0x0
-    format: { action(0): 0..0, version(0): 112..115, meter_addr(0): 3..18, meter_pfe(0): 19..19, action(1): 1..1, version(1): 116..119, meter_addr(1): 20..35, meter_pfe(1): 36..36, action(2): 2..2, version(2): 120..123, meter_addr(2): 37..52, meter_pfe(2): 53..53 }
-    match_group_map: [ [ 0, 1, 2 ] ]
+    format: { action(0): 0..0, version(0): 112..115, action(1): 1..1, version(1): 116..119, action(2): 2..2, version(2): 120..123, action(3): 3..3, version(3): 124..127, action(4): 4..4, version(4): 8..11 }
+    match_group_map: [ [ 0, 1, 2, 3, 4 ] ]
     hit: [  classify_https_0 ]
     miss:  classify_https_0
-    stateful: tcp_classify_0$salu.Ingress.reg_flow_pkts(hash_dist 0, meter_pfe, $DEFAULT)
-    stateful: tcp_classify_0$salu.Ingress.reg_flow_bytes(hash_dist 0, meter_pfe, $DEFAULT)
+    context_json:
+      static_entries:
+      - priority: 0
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        - field_name: hdr.ipv4.protocol
+          value: "0x6"
+        - field_name: hdr.tcp.$valid
+          value: "0x1"
+        action_handle: 0x20000003
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 1
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        - field_name: hdr.ipv4.protocol
+          value: "0x6"
+        - field_name: hdr.tcp.$valid
+          value: "0x0"
+        action_handle: 0x20000004
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 2
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        - field_name: hdr.ipv4.protocol
+          value: "0x0"
+        - field_name: hdr.tcp.$valid
+          value: "0x1"
+        action_handle: 0x20000004
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 3
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x0"
+        - field_name: hdr.ipv4.protocol
+          value: "0x0"
+        - field_name: hdr.tcp.$valid
+          value: "0x0"
+        action_handle: 0x20000004
+        is_default_entry: false
+        action_parameters_values: []
+
+    action_bus: { 32..33 : hash_dist(0, lo) }
     instruction: tcp_classify_0(action, $DEFAULT)
     actions:
       Ingress.mark_tcp_and_hash(0, 1):
@@ -516,60 +470,15 @@ stage 1 ingress:
       - default_action: { allowed: false, reason: none }
       - handle: 0x20000003
       - next_table: 0
-      - set meta.flow_idx, hval_0
-      - tcp_classify_0$salu.Ingress.reg_flow_pkts(flow_pkts_add_0, $hash_dist)
-      - tcp_classify_0$salu.Ingress.reg_flow_bytes(flow_bytes_add_0, $hash_dist)
+      - set meta.is_tcp, 1
+      - set H4(0..15), hash_dist(0, 0..15)
       Ingress.mark_non_tcp(1, 0):
       - hit_allowed: { allowed: true }
       - default_action: { allowed: true, is_constant: true }
       - handle: 0x20000004
       - next_table: 0
     default_action: Ingress.mark_non_tcp
-  stateful tcp_classify_0$salu.Ingress.reg_flow_pkts:
-    p4: { name: Ingress.reg_flow_pkts, size: 65536 }
-    row: [ 15, 13, 11 ]
-    logical_bus: [ S, O, O ]
-    column:
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3, 4 ]
-    maprams: 
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3, 4 ]
-    home_row: 15
-    input_xbar:
-      exact group 0: { 64: meta.pkt_len }
-    data_bytemask: 3
-    format: { lo: 32 }
-    actions:
-      flow_pkts_add_0:
-      - add lo, lo, 1
-  stateful tcp_classify_0$salu.Ingress.reg_flow_bytes:
-    p4: { name: Ingress.reg_flow_bytes, size: 65536 }
-    row: [ 11, 9, 7, 5 ]
-    logical_bus: [ S, O, O, O ]
-    column:
-    - 5
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3 ]
-    maprams: 
-    - 5
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3, 4, 5 ]
-    - [ 0, 1, 2, 3 ]
-    home_row: 11
-    input_xbar:
-      exact group 0: { 64: meta.pkt_len }
-    data_bytemask: 3
-    format: { lo: 32 }
-    actions:
-      flow_bytes_add_0:
-      - add lo, lo, phv_lo(0..15)
-stage 2 ingress:
-  dependency: match
-  ternary_match classify_https_0 0:
+  ternary_match classify_https_0 1:
     p4: { name: Ingress.classify_https, size: 3 }
     p4_param_order: 
       hdr.tcp.$valid: { type: exact, size: 1, full_size: 1 }
@@ -578,20 +487,12 @@ stage 2 ingress:
     row: 0
     bus: 0
     column: 0
-    hash_dist:
-      0: { hash: 0, mask: 0xffff, shift: 5 }
     input_xbar:
       ternary group 0: { 0: hdr.tcp.dport, 16: hdr.tcp.sport, 34: hdr.tcp.$valid }
-      exact group 0: { 0: meta.flow_idx }
-      hash 0:
-        0..15: meta.flow_idx
-      hash group 0:
-        table: [0]
-        seed: 0x0
     match:
     - { group: 0, byte_config: 3, dirtcam: 0x155 }
-    hit: [  END ]
-    miss:  END
+    hit: [  compute_pkt_len_0 ]
+    miss:  compute_pkt_len_0
     context_json:
       static_entries:
       - priority: 0
@@ -604,7 +505,7 @@ stage 2 ingress:
         - field_name: hdr.tcp.dport
           value: "0x0"
           mask: "0x0"
-        action_handle: 0x20000005
+        action_handle: 0x20000009
         is_default_entry: false
         action_parameters_values: []
       - priority: 1
@@ -617,13 +518,197 @@ stage 2 ingress:
         - field_name: hdr.tcp.dport
           value: "0x1BB"
           mask: "0xFFFF"
-        action_handle: 0x20000005
+        action_handle: 0x20000009
         is_default_entry: false
         action_parameters_values: []
 
     indirect: classify_https_0$tind
-  stateful classify_https_0$salu.Ingress.reg_https_flow_pkts:
-    p4: { name: Ingress.reg_https_flow_pkts, size: 65536 }
+  ternary_indirect classify_https_0$tind:
+    row: 0
+    bus: 0
+    column: 2
+    input_xbar:
+      ternary group 0: { 0: hdr.tcp.dport, 16: hdr.tcp.sport, 34: hdr.tcp.$valid }
+    format: { action: 0..0 }
+    instruction: classify_https_0$tind(action, $DEFAULT)
+    actions:
+      Ingress.set_https_flag(0, 2):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: false, reason: none }
+      - handle: 0x20000009
+      - next_table: 0
+      - set meta.is_https, 1
+      Ingress.clear_https_flag(1, 0):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true, is_constant: true }
+      - handle: 0x2000000a
+      - next_table: 0
+    default_action: Ingress.clear_https_flag
+  exact_match compute_pkt_len_0 2:
+    p4: { name: Ingress.compute_pkt_len, size: 2 }
+    p4_param_order: 
+      hdr.ipv4.$valid: { type: exact, size: 1, full_size: 1 }
+    row: 7
+    bus: 0
+    column: 2
+    stash: 
+      row: [ 7 ]
+      col: [ 2 ]
+      unit: [ 0 ]
+    ways:
+      - { group: 0, index: 10..19, select: 40..51 & 0x0, rams: [[7, 2]] }
+    input_xbar:
+      exact group 0: { 9: hdr.ipv4.$valid }
+      hash 0:
+        10: hdr.ipv4.$valid
+      hash group 0:
+        table: [0]
+        seed: 0x0
+    format: { action(0): 0..0, immediate(0): 3..18, version(0): 112..115, action(1): 1..1, immediate(1): 19..34, version(1): 116..119, action(2): 2..2, immediate(2): 35..50, version(2): 120..123 }
+    match_group_map: [ [ 0, 1, 2 ] ]
+    hit: [  forwarding_0 ]
+    miss:  forwarding_0
+    context_json:
+      static_entries:
+      - priority: 0
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x1"
+        action_handle: 0x20000001
+        is_default_entry: false
+        action_parameters_values: []
+      - priority: 1
+        match_key_fields_values:
+        - field_name: hdr.ipv4.$valid
+          value: "0x0"
+        action_handle: 0x20000002
+        is_default_entry: false
+        action_parameters_values: []
+
+    action_bus: { 36..37 : immediate(0..15) }
+    instruction: compute_pkt_len_0(action, $DEFAULT)
+    actions:
+      Ingress.set_pkt_len_ipv4(0, 3):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: false, reason: none }
+      - handle: 0x20000001
+      - next_table: 0
+      - { $constant0: immediate(0..15), $constant0: 14 }
+      - add H1, $constant0, H0
+      Ingress.set_pkt_len_zero(1, 0):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true, is_constant: true }
+      - handle: 0x20000002
+      - next_table: 0
+      - {  }
+    default_action: Ingress.set_pkt_len_zero
+stage 1 ingress:
+  dependency: match
+  exact_match forwarding_0 0:
+    p4: { name: Ingress.forwarding, size: 256 }
+    p4_param_order: 
+      ig_intr_md.ingress_port: { type: exact, size: 9, full_size: 9 }
+    row: 7
+    bus: 0
+    column: 2
+    stash: 
+      row: [ 7 ]
+      col: [ 2 ]
+      unit: [ 0 ]
+    ways:
+      - { group: 0, index: 0..9, select: 40..51 & 0x0, rams: [[7, 2]] }
+    input_xbar:
+      exact group 0: { 0: ig_intr_md.ingress_port }
+      hash 0:
+        0..7: ig_intr_md.ingress_port(0..7)
+        8: ig_intr_md.ingress_port(8)
+      hash group 0:
+        table: [0]
+        seed: 0x0
+    format: { action(0): 0..0, immediate(0): 5..13, version(0): 112..115, action(1): 1..1, immediate(1): 14..22, version(1): 116..119, action(2): 2..2, immediate(2): 23..31, version(2): 120..123, action(3): 3..3, immediate(3): 32..40, version(3): 124..127, action(4): 4..4, immediate(4): 41..49, version(4): 56..59 }
+    match_group_map: [ [ 0, 1, 2, 3, 4 ] ]
+    hit: [  https_bytes_update_0 ]
+    miss:  https_bytes_update_0
+    action_bus: { 32..33 : immediate(0..8) }
+    instruction: forwarding_0(action, $DEFAULT)
+    actions:
+      Ingress.send_using_port(0, 1):
+      - p4_param_order: { port: 9 }
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true }
+      - handle: 0x2000000f
+      - next_table: 0
+      - { port: immediate(0..8) }
+      - set ig_intr_md_for_tm.ucast_egress_port, port
+      - set ig_intr_md_for_tm.bypass_egress, 0
+      Ingress.drop(1, 2):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true }
+      - handle: 0x20000010
+      - next_table: 0
+      - {  }
+      - set ig_intr_md_for_tm.ucast_egress_port, 0
+      - set B1(0..3), 249
+      NoAction(-1, 0):
+      - hit_allowed: { allowed: false, reason: user_indicated_default_only }
+      - default_only_action: { allowed: true }
+      - handle: 0x20000011
+      - next_table: 0
+      - {  }
+    default_only_action: NoAction
+  exact_match https_bytes_update_0 1:
+    p4: { name: Ingress.https_bytes_update, size: 2 }
+    p4_param_order: 
+      meta.is_https: { type: exact, size: 1, full_size: 1 }
+    row: 0
+    result_bus: 0
+    hash_dist:
+      0: { hash: 1, mask: 0xffff, shift: 5 }
+    input_xbar:
+      exact group 0: { 80: meta.flow_idx }
+      hash 1:
+        0..15: meta.flow_idx
+      hash group 1:
+        table: [1]
+        seed: 0x0
+    gateway:
+      name: https_bytes_update_0-gateway
+      input_xbar:
+        exact group 0: { 20: meta.is_https }
+      row: 7
+      bus: 0
+      unit: 0
+      payload_row: 0
+      payload_unit: 0
+      payload: 0xc0001
+      format: { action: 0..1, meter_addr: 2..17, meter_pfe: 18..18, meter_type: 19..21 }
+      match: { 4: meta.is_https }
+      0x1:
+        action: do_https_bytes
+        next:  https_pkts_update_0
+      miss:
+        run_table: true
+    hit: [  https_pkts_update_0 ]
+    miss:  https_pkts_update_0
+    stateful: https_bytes_update_0$salu.Ingress.reg_https_flow_bytes(hash_dist 0, meter_pfe, meter_type)
+    instruction: https_bytes_update_0(action, $DEFAULT)
+    actions:
+      Ingress.do_https_bytes(1, 0):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: false, reason: none }
+      - handle: 0x2000000d
+      - next_table_miss:  https_pkts_update_0
+      - next_table: 0
+      - https_bytes_update_0$salu.Ingress.reg_https_flow_bytes(https_flow_bytes_add_0, $hash_dist)
+      Ingress.nop(2, 3):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true, is_constant: true }
+      - handle: 0x2000000e
+      - next_table_miss:  https_pkts_update_0
+      - next_table: 0
+    default_action: Ingress.nop
+  stateful https_bytes_update_0$salu.Ingress.reg_https_flow_bytes:
+    p4: { name: Ingress.reg_https_flow_bytes, size: 65536 }
     row: [ 15, 13, 11 ]
     logical_bus: [ S, O, O ]
     column:
@@ -640,10 +725,61 @@ stage 2 ingress:
     data_bytemask: 3
     format: { lo: 32 }
     actions:
-      https_flow_pkts_add_0:
-      - add lo, lo, 1
-  stateful classify_https_0$salu.Ingress.reg_https_flow_bytes:
-    p4: { name: Ingress.reg_https_flow_bytes, size: 65536 }
+      https_flow_bytes_add_0:
+      - add lo, lo, phv_lo(0..15)
+  exact_match https_pkts_update_0 2:
+    p4: { name: Ingress.https_pkts_update, size: 2 }
+    p4_param_order: 
+      meta.is_https: { type: exact, size: 1, full_size: 1 }
+    row: 0
+    result_bus: 1
+    hash_dist:
+      0: { hash: 1, mask: 0xffff, shift: 5 }
+    input_xbar:
+      exact group 0: { 80: meta.flow_idx }
+      hash 1:
+        0..15: meta.flow_idx
+      hash group 1:
+        table: [1]
+        seed: 0x0
+    gateway:
+      name: https_pkts_update_0-gateway
+      input_xbar:
+        exact group 0: { 20: meta.is_https }
+      row: 0
+      bus: 0
+      unit: 0
+      payload_row: 0
+      payload_unit: 1
+      payload: 0xc0001
+      format: { action: 0..1, meter_addr: 2..17, meter_pfe: 18..18, meter_type: 19..21 }
+      match: { 4: meta.is_https }
+      0x1:
+        action: do_https_pkts
+        next:  flow_bytes_update_0
+      miss:
+        run_table: true
+    hit: [  flow_bytes_update_0 ]
+    miss:  flow_bytes_update_0
+    stateful: https_pkts_update_0$salu.Ingress.reg_https_flow_pkts(hash_dist 0, meter_pfe, meter_type)
+    instruction: https_pkts_update_0(action, $DEFAULT)
+    actions:
+      Ingress.do_https_pkts(1, 0):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: false, reason: none }
+      - handle: 0x2000000b
+      - next_table_miss:  flow_bytes_update_0
+      - next_table: 0
+      - https_pkts_update_0$salu.Ingress.reg_https_flow_pkts(https_flow_pkts_add_0, $hash_dist)
+      Ingress.nop(2, 4):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true, is_constant: true }
+      - handle: 0x2000000c
+      - next_table_miss:  flow_bytes_update_0
+      - next_table: 0
+    default_action: Ingress.nop
+  stateful https_pkts_update_0$salu.Ingress.reg_https_flow_pkts:
+    p4: { name: Ingress.reg_https_flow_pkts, size: 65536 }
     row: [ 11, 9, 7, 5 ]
     logical_bus: [ S, O, O, O ]
     column:
@@ -657,45 +793,202 @@ stage 2 ingress:
     - [ 0, 1, 2, 3, 4, 5 ]
     - [ 0, 1, 2, 3 ]
     home_row: 11
+    format: { lo: 32 }
+    actions:
+      https_flow_pkts_add_0:
+      - add lo, lo, 1
+stage 2 ingress:
+  dependency: match
+  exact_match flow_bytes_update_0 0:
+    p4: { name: Ingress.flow_bytes_update, size: 2 }
+    p4_param_order: 
+      meta.is_tcp: { type: exact, size: 1, full_size: 1 }
+    row: 0
+    result_bus: 0
+    hash_dist:
+      0: { hash: 0, mask: 0xffff, shift: 5 }
+    input_xbar:
+      exact group 0: { 8: meta.flow_idx(8..15), 16: meta.flow_idx(0..7) }
+      hash 0:
+        0..7: meta.flow_idx(0..7)
+        8..15: meta.flow_idx(8..15)
+      hash group 0:
+        table: [0]
+        seed: 0x0
+    gateway:
+      name: flow_bytes_update_0-gateway
+      input_xbar:
+        exact group 0: { 4: meta.is_tcp }
+      row: 0
+      bus: 0
+      unit: 0
+      payload_row: 0
+      payload_unit: 0
+      payload: 0xc0001
+      format: { action: 0..1, meter_addr: 2..17, meter_pfe: 18..18, meter_type: 19..21 }
+      match: { 4: meta.is_tcp }
+      0x1:
+        action: do_flow_bytes
+        next:  flow_pkts_update_0
+      miss:
+        run_table: true
+    hit: [  flow_pkts_update_0 ]
+    miss:  flow_pkts_update_0
+    stateful: flow_bytes_update_0$salu.Ingress.reg_flow_bytes(hash_dist 0, meter_pfe, meter_type)
+    instruction: flow_bytes_update_0(action, $DEFAULT)
+    actions:
+      Ingress.do_flow_bytes(1, 0):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: false, reason: none }
+      - handle: 0x20000007
+      - next_table_miss:  flow_pkts_update_0
+      - next_table: 0
+      - flow_bytes_update_0$salu.Ingress.reg_flow_bytes(flow_bytes_add_0, $hash_dist)
+      Ingress.nop(2, 1):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: true, is_constant: true }
+      - handle: 0x20000008
+      - next_table_miss:  flow_pkts_update_0
+      - next_table: 0
+    default_action: Ingress.nop
+  stateful flow_bytes_update_0$salu.Ingress.reg_flow_bytes:
+    p4: { name: Ingress.reg_flow_bytes, size: 65536 }
+    row: [ 15, 13, 11 ]
+    logical_bus: [ S, O, O ]
+    column:
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3, 4 ]
+    maprams: 
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3, 4 ]
+    home_row: 15
     input_xbar:
       exact group 0: { 64: meta.pkt_len }
     data_bytemask: 3
     format: { lo: 32 }
     actions:
-      https_flow_bytes_add_0:
+      flow_bytes_add_0:
       - add lo, lo, phv_lo(0..15)
-  ternary_indirect classify_https_0$tind:
+  exact_match flow_pkts_update_0 1:
+    p4: { name: Ingress.flow_pkts_update, size: 2 }
+    p4_param_order: 
+      meta.is_tcp: { type: exact, size: 1, full_size: 1 }
     row: 0
-    bus: 0
-    column: 2
+    result_bus: 1
     hash_dist:
       0: { hash: 0, mask: 0xffff, shift: 5 }
     input_xbar:
-      ternary group 0: { 0: hdr.tcp.dport, 16: hdr.tcp.sport, 34: hdr.tcp.$valid }
-      exact group 0: { 0: meta.flow_idx }
+      exact group 0: { 8: meta.flow_idx(8..15), 16: meta.flow_idx(0..7) }
       hash 0:
-        0..15: meta.flow_idx
+        0..7: meta.flow_idx(0..7)
+        8..15: meta.flow_idx(8..15)
       hash group 0:
         table: [0]
         seed: 0x0
-    format: { action: 0..0, meter_addr: 1..16, meter_pfe: 17..17 }
-    stateful: classify_https_0$salu.Ingress.reg_https_flow_pkts(hash_dist 0, meter_pfe, $DEFAULT)
-    stateful: classify_https_0$salu.Ingress.reg_https_flow_bytes(hash_dist 0, meter_pfe, $DEFAULT)
-    instruction: classify_https_0$tind(action, $DEFAULT)
+    gateway:
+      name: flow_pkts_update_0-gateway
+      input_xbar:
+        exact group 0: { 84: meta.is_tcp }
+      row: 0
+      bus: 1
+      unit: 1
+      payload_row: 0
+      payload_unit: 1
+      payload: 0xc0001
+      format: { action: 0..1, meter_addr: 2..17, meter_pfe: 18..18, meter_type: 19..21 }
+      match: { 4: meta.is_tcp }
+      0x1:
+        action: do_flow_pkts
+        next:  END
+      miss:
+        run_table: true
+    hit: [  END ]
+    miss:  END
+    stateful: flow_pkts_update_0$salu.Ingress.reg_flow_pkts(hash_dist 0, meter_pfe, meter_type)
+    instruction: flow_pkts_update_0(action, $DEFAULT)
     actions:
-      Ingress.set_https_and_count(0, 0):
+      Ingress.do_flow_pkts(1, 0):
       - hit_allowed: { allowed: true }
       - default_action: { allowed: false, reason: none }
       - handle: 0x20000005
+      - next_table_miss:  END
       - next_table: 0
-      - classify_https_0$salu.Ingress.reg_https_flow_pkts(https_flow_pkts_add_0, $hash_dist)
-      - classify_https_0$salu.Ingress.reg_https_flow_bytes(https_flow_bytes_add_0, $hash_dist)
-      Ingress.clear_https_flag(1, 1):
+      - flow_pkts_update_0$salu.Ingress.reg_flow_pkts(flow_pkts_add_0, $hash_dist)
+      Ingress.nop(2, 2):
       - hit_allowed: { allowed: true }
       - default_action: { allowed: true, is_constant: true }
       - handle: 0x20000006
+      - next_table_miss:  END
       - next_table: 0
-    default_action: Ingress.clear_https_flag
+    default_action: Ingress.nop
+  stateful flow_pkts_update_0$salu.Ingress.reg_flow_pkts:
+    p4: { name: Ingress.reg_flow_pkts, size: 65536 }
+    row: [ 11, 9, 7, 5 ]
+    logical_bus: [ S, O, O, O ]
+    column:
+    - 5
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3 ]
+    maprams: 
+    - 5
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3, 4, 5 ]
+    - [ 0, 1, 2, 3 ]
+    home_row: 11
+    format: { lo: 32 }
+    actions:
+      flow_pkts_add_0:
+      - add lo, lo, 1
+stage 0 egress:
+  ternary_match packet_size_hist_0 3:
+    p4: { name: Egress.packet_size_hist, size: 512 }
+    p4_param_order: 
+      eg_intr_md.pkt_length: { type: range, size: 16, full_size: 16 }
+    row: [ 1, 2, 3 ]
+    bus: [ 0, 0, 0 ]
+    column:
+    - 0
+    - 0
+    - 0
+    indirect_bus: 1
+    input_xbar:
+      ternary group 1: { 0: eg_intr_md.pkt_length, 16: eg_intr_md.pkt_length }
+    match:
+    - { group: 1, byte_config: 3, dirtcam: 0xfa }
+    hit: [  END ]
+    miss:  END
+    stats: packet_size_hist_0$stats.Egress.packet_size_stats($DIRECT, $DEFAULT)
+    instruction: packet_size_hist_0($DEFAULT, $DEFAULT)
+    actions:
+      Egress.just_count(0, 0):
+      - hit_allowed: { allowed: true }
+      - default_action: { allowed: false, reason: none }
+      - handle: 0x20000012
+      - next_table: 0
+      - packet_size_hist_0$stats.Egress.packet_size_stats($DIRECT)
+      NoAction(-1, 1):
+      - hit_allowed: { allowed: false, reason: user_indicated_default_only }
+      - default_only_action: { allowed: true, is_constant: true }
+      - handle: 0x20000013
+      - next_table: 0
+    default_only_action: NoAction
+  counter packet_size_hist_0$stats.Egress.packet_size_stats:
+    p4: { name: Egress.packet_size_stats }
+    row: 13
+    logical_bus: S
+    column: [ 0, 1 ]
+    maprams: [ 0, 1 ]
+    vpns: [ 0, 1 ]
+    home_row: 13
+    count: packets
+    format: {packets(0): 96..127, packets(1): 64..95, packets(2): 32..63, packets(3): 0..31}
+    lrt:
+    - { threshold: 23718048, interval: 268435200 }
+    - { threshold: 23718048, interval: 268435200 }
+    - { threshold: 23718048, interval: 268435200 }
 
 
 primitives: "basic.prim.json"

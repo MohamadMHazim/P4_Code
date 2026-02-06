@@ -10,3 +10,44 @@
 $SDE/./run_bfshell.sh --no-status-srv -b /root/P4_labs/lab2/bfrt_python/setup.py
 -Issue the following command to start listening for incoming packets on the interface facing PC1 through the Tofino model switch (i.e., eth0). When prompted for a password, type password: sudo ./recv.py eth0
 -In the new Linux terminal, issue the command below to send a packet to PC2 via the Tofino model switch. When prompted for a password, type password.: sudo ./send.py 10.0.0.2 eth0 HelloWorld
+
+--------------------------------------
+run read_registers: /home/ubuntu/open-p4studio/run_bfshell.sh \
+  --no-status-srv \
+  -b /home/ubuntu/P4_Code/bfrt_python/read_registers.py
+
+-send tcp packets: sudo hping3 -S -p 80 -i u1000 -I veth0 10.0.0.2
+
+bfrt.basic.pipe.Ingress -> tcp_pkts.get(0)
+/home/ubuntu/open-p4studio/install/bin/bfshell -p 9999
+
+
+VIRTUAL MACHINE:
+1️⃣ Create veths
+sudo /home/ubuntu/open-p4studio/install/bin/veth_setup.sh 128
+2️⃣ Start the Tofino model
+sudo /home/ubuntu/open-p4studio/install/bin/tofino-model
+3️⃣ Start bf_switchd
+sudo /home/ubuntu/open-p4studio/install/bin/bf_switchd \
+  --install-dir /home/ubuntu/open-p4studio/install \
+  --conf-file /home/ubuntu/P4_Code/p4src/basic.tofino/basic.conf
+
+
+After compilation:
+1️⃣  sudo mkdir -p /home/ubuntu/open-p4studio/install/pipe
+sudo cp /home/ubuntu/P4_Code/p4src/basic.tofino/pipe/context.json \
+/home/ubuntu/open-p4studio/install/pipe/context.json
+
+sudo cp /home/ubuntu/P4_Code/p4src/basic.tofino/pipe/tofino.bin \
+/home/ubuntu/open-p4studio/install/pipe/tofino.bin 
+
+sudo cp /home/ubuntu/P4_Code/p4src/basic.tofino/bfrt.json \
+/home/ubuntu/open-p4studio/install/bf-rt.json
+
+2️⃣ create switch conf file => 
+sudo /home/ubuntu/open-p4studio/install/bin/p4c-gen-bfrt-conf \
+  --testdir /home/ubuntu/P4_Code/p4src/basic.tofino \
+  --installdir /home/ubuntu/open-p4studio/install \
+  --name basic \
+  --device tofino \
+  --pipe pipe

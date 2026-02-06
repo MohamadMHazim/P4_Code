@@ -12,17 +12,35 @@ M:\l
  hdr.ipv4.$valid\l
  hdr.ipv4.protocol\l
  hdr.tcp.$valid\l
-\lR:\l
- hval_0\l
- meta.pkt_len\l
 \lW:\l
+ meta.is_tcp\l
  meta.flow_idx\l
  "];
+flow_pkts_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="flow_pkts_update_0\l\l
+M:\l
+ meta.is_tcp\l
+\l "];
+flow_bytes_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="flow_bytes_update_0\l\l
+M:\l
+ meta.is_tcp\l
+\lR:\l
+ meta.pkt_len\l
+\l "];
 classify_https_0 [ shape=record, style="filled", fillcolor=cornsilk, label="classify_https_0\l\l
 M:\l
  hdr.tcp.$valid\l
  hdr.tcp.sport\l
  hdr.tcp.dport\l
+\lW:\l
+ meta.is_https\l
+ "];
+https_pkts_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="https_pkts_update_0\l\l
+M:\l
+ meta.is_https\l
+\l "];
+https_bytes_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="https_bytes_update_0\l\l
+M:\l
+ meta.is_https\l
 \lR:\l
  meta.pkt_len\l
 \l "];
@@ -36,7 +54,11 @@ M:\l
  "];
     PARSER -> compute_pkt_len_0
     compute_pkt_len_0 -> tcp_classify_0
-    tcp_classify_0 -> classify_https_0
-    classify_https_0 -> forwarding_0
+    tcp_classify_0 -> flow_pkts_update_0
+    flow_pkts_update_0 -> flow_bytes_update_0
+    flow_bytes_update_0 -> classify_https_0
+    classify_https_0 -> https_pkts_update_0
+    https_pkts_update_0 -> https_bytes_update_0
+    https_bytes_update_0 -> forwarding_0
     forwarding_0 -> DEPARSER
 }
