@@ -1,6 +1,10 @@
 version:
 <<<<<<< HEAD
+<<<<<<< HEAD
   run_id: "92faedbbb9e643f0"
+=======
+  run_id: "d3f78321a2a14e1e"
+>>>>>>> 22cfa6d (new changes)
 =======
   run_id: "d3f78321a2a14e1e"
 >>>>>>> 22cfa6d (new changes)
@@ -420,7 +424,10 @@ stage 0 ingress:
     hit: [  classify_https_0 ]
     miss:  classify_https_0
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 22cfa6d (new changes)
     context_json:
       static_entries:
       - priority: 0
@@ -468,6 +475,9 @@ stage 0 ingress:
         is_default_entry: false
         action_parameters_values: []
 
+<<<<<<< HEAD
+>>>>>>> 22cfa6d (new changes)
+=======
 >>>>>>> 22cfa6d (new changes)
     action_bus: { 32..33 : hash_dist(0, lo) }
     instruction: tcp_classify_0(action, $DEFAULT)
@@ -576,7 +586,10 @@ stage 0 ingress:
     hit: [  forwarding_0 ]
     miss:  forwarding_0
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 22cfa6d (new changes)
     context_json:
       static_entries:
       - priority: 0
@@ -594,6 +607,9 @@ stage 0 ingress:
         is_default_entry: false
         action_parameters_values: []
 
+<<<<<<< HEAD
+>>>>>>> 22cfa6d (new changes)
+=======
 >>>>>>> 22cfa6d (new changes)
     action_bus: { 36..37 : immediate(0..15) }
     instruction: compute_pkt_len_0(action, $DEFAULT)

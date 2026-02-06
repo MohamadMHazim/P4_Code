@@ -192,6 +192,7 @@
       "data" : [],
       "supported_operations" : [],
       "attributes" : ["EntryScope", "ConstTable"]
+<<<<<<< HEAD
     },
     {
       "name" : "pipe.Ingress.flow_pkts_update",
@@ -276,6 +277,8 @@
       "data" : [],
       "supported_operations" : [],
       "attributes" : ["EntryScope", "ConstTable"]
+=======
+>>>>>>> 22cfa6d (new changes)
     },
     {
       "name" : "pipe.Ingress.classify_https",

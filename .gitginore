@@ -1,1 +1,12 @@
-printf "\n# generated outputs\nbfrt_python/out/\n" >> .gitignore
+
+# Tofino build artifacts
+basic.tofino/pipe/
+basic.tofino/pipe/*.bin
+basic.tofino/pipe/*.conf
+basic.tofino/pipe/*.json
+basic.tofino/pipe/*.p4info
+basic.tofino/pipe/logs/
+basic.tofino/pipe/.cache/
+
+# BFRT / runtime outputs
+bfrt_python/out/
