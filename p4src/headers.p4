@@ -60,10 +60,10 @@ struct my_ingress_headers_t {
 
 /******  G L O B A L   I N G R E S S   M E T A D A T A  *********/
 struct my_ingress_metadata_t {
-    bit<1>     is_tcp;
-    bit<1>     is_https;
-    bit<16>    flow_idx;  // CRC16 bucket index
-    bit<16>    pkt_len;   // copy of ingress intrinsic length
+bit<16> pkt_len;
+bit<1>  is_outgoing;
+bit<16> sel_port;
+bit<16> bucket_idx;
 
 }
 
