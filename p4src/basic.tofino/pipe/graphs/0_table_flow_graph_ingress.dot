@@ -7,40 +7,51 @@ M:\l
 \lW:\l
  meta.pkt_len\l
  "];
-tcp_classify_0 [ shape=record, style="filled", fillcolor=cornsilk, label="tcp_classify_0\l\l
+set_direction_0 [ shape=record, style="filled", fillcolor=cornsilk, label="set_direction_0\l\l
+M:\l
+ ig_intr_md.ingress_port\l
+\lW:\l
+ meta.is_outgoing\l
+ "];
+init_sel_port_0 [ shape=record, style="filled", fillcolor=cornsilk, label="init_sel_port_0\l\l
 M:\l
  hdr.ipv4.$valid\l
- hdr.ipv4.protocol\l
- hdr.tcp.$valid\l
 \lW:\l
- meta.is_tcp\l
- meta.flow_idx\l
+ meta.sel_port\l
  "];
-flow_pkts_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="flow_pkts_update_0\l\l
-M:\l
- meta.is_tcp\l
-\l "];
-flow_bytes_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="flow_bytes_update_0\l\l
-M:\l
- meta.is_tcp\l
-\lR:\l
- meta.pkt_len\l
-\l "];
-classify_https_0 [ shape=record, style="filled", fillcolor=cornsilk, label="classify_https_0\l\l
+select_tcp_port_0 [ shape=record, style="filled", fillcolor=cornsilk, label="select_tcp_port_0\l\l
 M:\l
  hdr.tcp.$valid\l
+ meta.is_outgoing\l
+\lR:\l
  hdr.tcp.sport\l
  hdr.tcp.dport\l
 \lW:\l
- meta.is_https\l
+ meta.sel_port\l
  "];
-https_pkts_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="https_pkts_update_0\l\l
+select_udp_port_0 [ shape=record, style="filled", fillcolor=cornsilk, label="select_udp_port_0\l\l
 M:\l
- meta.is_https\l
+ hdr.udp.$valid\l
+ meta.is_outgoing\l
+\lR:\l
+ hdr.udp.sport\l
+ hdr.udp.dport\l
+\lW:\l
+ meta.sel_port\l
+ "];
+cond_2 [ shape=record, style="filled", fillcolor=cornsilk, label="hdr.ipv4.$valid == 1\l\l
+ "];
+tbl_compute_bucket_idx [ shape=record, style="filled", fillcolor=cornsilk, label="tbl_compute_bucket_idx\l\l
+W:\l
+ meta.bucket_idx\l
+ "];
+bucket_pkts_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="bucket_pkts_update_0\l\l
+M:\l
+ hdr.ipv4.$valid\l
 \l "];
-https_bytes_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="https_bytes_update_0\l\l
+bucket_bytes_update_0 [ shape=record, style="filled", fillcolor=cornsilk, label="bucket_bytes_update_0\l\l
 M:\l
- meta.is_https\l
+ hdr.ipv4.$valid\l
 \lR:\l
  meta.pkt_len\l
 \l "];
@@ -53,12 +64,15 @@ M:\l
  ig_intr_md_for_dprsr.drop_ctl\l
  "];
     PARSER -> compute_pkt_len_0
-    compute_pkt_len_0 -> tcp_classify_0
-    tcp_classify_0 -> flow_pkts_update_0
-    flow_pkts_update_0 -> flow_bytes_update_0
-    flow_bytes_update_0 -> classify_https_0
-    classify_https_0 -> https_pkts_update_0
-    https_pkts_update_0 -> https_bytes_update_0
-    https_bytes_update_0 -> forwarding_0
+    compute_pkt_len_0 -> set_direction_0
+    set_direction_0 -> init_sel_port_0
+    init_sel_port_0 -> select_tcp_port_0
+    select_tcp_port_0 -> select_udp_port_0
+    select_udp_port_0 -> cond_2
+    cond_2 -> tbl_compute_bucket_idx
+    cond_2 -> bucket_pkts_update_0
+    tbl_compute_bucket_idx -> bucket_pkts_update_0
+    bucket_pkts_update_0 -> bucket_bytes_update_0
+    bucket_bytes_update_0 -> forwarding_0
     forwarding_0 -> DEPARSER
 }
