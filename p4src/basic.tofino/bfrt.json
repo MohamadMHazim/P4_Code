@@ -193,6 +193,7 @@
       "supported_operations" : [],
       "attributes" : ["EntryScope", "ConstTable"]
 <<<<<<< HEAD
+<<<<<<< HEAD
     },
     {
       "name" : "pipe.Ingress.flow_pkts_update",
@@ -277,6 +278,8 @@
       "data" : [],
       "supported_operations" : [],
       "attributes" : ["EntryScope", "ConstTable"]
+=======
+>>>>>>> 22cfa6d (new changes)
 =======
 >>>>>>> 22cfa6d (new changes)
     },
