@@ -34,10 +34,12 @@ elif ip_dst == "20.0.0.1":
 else:
     mac_dst = "ff:ff:ff:ff:ff:ff"
 
-print "Sending IP packet to", ip_dst
+# print "Sending IP packet to", ip_dst
 p = (Ether(dst=mac_dst)/
      IP(dst=ip_dst, src="10.0.0.1")/
      TCP(sport=8, dport=8)/
      msg)
-
-sendp(p, iface=iface)
+p1 = (Ether(dst=mac_dst)/
+     IPv6()/
+     ICMPv6EchoRequest())
+sendp(p1, iface=iface)

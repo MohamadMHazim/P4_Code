@@ -51,3 +51,13 @@ sudo /home/ubuntu/open-p4studio/install/bin/p4c-gen-bfrt-conf \
   --name basic \
   --device tofino \
   --pipe pipe
+
+ing = bfrt.basic.pipe.Ingress
+ing.reg_in_pkts.clear()
+ing.reg_out_pkts.clear()
+ing.reg_in_bytes.clear()
+ing.reg_out_bytes.clear()
+
+ing = bfrt.basic.pipe.Ingress
+ing.reg_in_pkts.clear()
+ing.reg_in_bytes.clear()
